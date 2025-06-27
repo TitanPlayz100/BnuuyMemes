@@ -12,21 +12,37 @@ export default function Home() {
   };
 
   useEffect(() => {
-    const fetchFiles = async () => {
-      const res = await fetch('/api/listfiles');
-      const data = await res.json();
-      setFiles(data);
-    };
-
     fetchFiles();
   }, []);
 
+  async function fetchFiles() {
+    const res = await fetch('/api/listfiles');
+      const { files } = await res.json();
+      setFiles(files);
+  }
 
-  function upload(event: React.ChangeEvent<HTMLInputElement>) {
+  async function upload(event: React.ChangeEvent<HTMLInputElement>) {
     const selectedFile = event.target.files?.[0];
     if (selectedFile == null) return;
-
     setFilename(selectedFile.name);
+
+    const res = await fetch('/api/upload');
+    const { uploadUrl, uploadAuthToken } = await res.json();
+
+    const uploadRes = await fetch(uploadUrl, {
+      method: 'POST',
+      headers: {
+        Authorization: uploadAuthToken,
+        'X-Bz-File-Name': encodeURIComponent(selectedFile.name),
+        'Content-Type': selectedFile.type || 'b2/x-auto',
+        'X-Bz-Content-Sha1': 'do_not_verify',
+      },
+      body: selectedFile,
+    });
+
+    await uploadRes.json();
+    
+    fetchFiles();
   }
 
   async function download(filename: string) {

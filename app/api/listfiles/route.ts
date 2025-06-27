@@ -21,9 +21,6 @@ export async function GET() {
     }),
   });
 
-  const listData = await listRes.json();
-
-  return new Response(JSON.stringify(listData.files), {
-    headers: { 'Content-Type': 'application/json' },
-  });
+  const { files } = await listRes.json();
+  return Response.json({ files });
 }
