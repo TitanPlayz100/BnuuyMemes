@@ -4,11 +4,12 @@ let links = fs.readFileSync("./videoLinks.txt", "utf-8");
 let linkArr = links.split('\n').map(msg => msg.split(' (by ')[0]);
 
 let messages = fs.readFileSync("./messages.txt", "utf-8");
-let messageArr = messages.split('\r\n');
-
+let messageArr = messages.replace('\r', '').split('\n');
 
 let messagesObj = [];
+
 for (let i = 0; i < messageArr.length; i += 3) {
+    // console.log(messageArr[i] + ' made ' + messageArr[i+2])
     let name = messageArr[i].split(': ')[1]
     let file = messageArr[i + 2].split(': ')[1]
     messagesObj.push({ name, file, link: null });

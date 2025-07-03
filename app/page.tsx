@@ -41,8 +41,41 @@ export default function Home() {
     });
 
     await uploadRes.json();
-    
+
     fetchFiles();
+  }
+
+  async function uploadFilesFromJson(event: React.ChangeEvent<HTMLInputElement>) {
+    const jsonFile = event.target.files?.[0];
+    if (!jsonFile) return;
+
+    const content = await jsonFile.text();
+    const messages: { name: string, file: string, link: string }[] = JSON.parse(content);
+
+
+    messages.forEach(async ({ name, file, link }) => {
+      const res = await fetch('/api/upload');
+      const { uploadUrl, uploadAuthToken } = await res.json();
+
+      const fileres = await fetch(link);
+      const fileBlob = await fileres.blob();
+
+      const video = new File([fileBlob], file, { type: fileBlob.type || 'b2/x-auto' });
+
+      const uploadres = await fetch(uploadUrl, {
+        method: 'POST',
+        headers: {
+          Authorization: uploadAuthToken,
+          'X-Bz-File-Name': encodeURIComponent(file),
+          'Content-Type': 'b2/x-auto',
+          'X-Bz-Content-Sha1': 'do_not_verify',
+        },
+        body: video,
+      });
+
+      const upload = await uploadres.json();
+      console.log("upload complete", upload)
+    })
   }
 
   async function download(filename: string) {
@@ -69,9 +102,17 @@ export default function Home() {
         <input ref={inputRef} type="file" onChange={upload} className="hidden" />
       </div>
 
+      <div>
+        <button type="button" onClick={handleClick} className="bg-white text-black rounded px-4 py-2 m-2 ml-16 border hover:bg-gray-100 transition duration-200 ease-in-out">
+          Upload Messages Json
+        </button>
+        <input ref={inputRef} type="file" onChange={uploadFilesFromJson} className="hidden" />
+      </div>
+
       <button onClick={() => download(filename)} className="bg-white text-black rounded px-4 py-2 m-2 ml-16 border hover:bg-gray-100 transition duration-200 ease-in-out">
         download
       </button>
+
 
       <div className="m-5 ml-10 flex flex-col justify-center">
         {files.map((file, index) => (
