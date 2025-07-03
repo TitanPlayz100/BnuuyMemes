@@ -17,8 +17,8 @@ export default function Home() {
 
   async function fetchFiles() {
     const res = await fetch('/api/listfiles');
-      const { files } = await res.json();
-      setFiles(files);
+    const { files } = await res.json();
+    setFiles(files);
   }
 
   async function upload(event: React.ChangeEvent<HTMLInputElement>) {
