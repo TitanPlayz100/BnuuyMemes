@@ -1,4 +1,4 @@
-import { readFileSync, createWriteStream, readdirSync, writeFileSync } from 'fs';
+import { readFileSync, createWriteStream } from 'fs';
 import { Downloader } from 'nodejs-file-downloader'
 import { YtDlp } from 'ytdlp-nodejs';
 import readline from 'readline'
@@ -7,25 +7,23 @@ const ytdlp = new YtDlp();
 const messages = JSON.parse(readFileSync("./out2.json", "utf-8"));
 const total = messages.length;
 
-let valid = 0;
+// loop each parsed message
+messages.forEach(message => download(message.link));
 
-async function download(url) {
-    if (url == null) {
-        printCount();
-        return;
-    }
-
+function download(url) {
+    if (url == null) return;
     if (url.includes("youtube.com")) {
-        await downloadYT(url);
-        return;
+        downloadYT(url);
+    } else {
+        downloadNormal(url)
     }
+}
 
-    const downloader = new Downloader({ url, directory: "./bnuuys" });
-
+async function downloadNormal(url) {
     try {
+        // async normal downloader
+        const downloader = new Downloader({ url, directory: "./bnuuys" });
         await downloader.download();
-        valid++;
-
         printCount();
     } catch (error) {
         if (error.responseBody) {
@@ -36,32 +34,23 @@ async function download(url) {
 
 async function downloadYT(url) {
     try {
+        // use ytdlp to download
         const title = await ytdlp.getTitleAsync(url);
         const fileStream = createWriteStream(`./bnuuys/${title.trim()}.mp4`);
         const stream = ytdlp.stream(url);
         stream.pipe(fileStream);
-        valid++;
-
         printCount();
     } catch (error) {
         console.error('YT Error:', error);
     }
 }
 
+// updating counter in cli
+let downloadCount = 0;
 function printCount() {
+    downloadCount++;
     readline.clearLine(process.stdout, 0);
     readline.cursorTo(process.stdout, 0);
-    process.stdout.write(`${valid}/${total}`);
+    process.stdout.write(`${downloadCount}/${total}`);
 }
 
-messages.forEach(message => download(message.link))
-
-/*
-function getFailed() {
-    const messagesTotal = JSON.parse(readFileSync("./failed.json", "utf-8"));
-    const downloaded = readdirSync("./bnuuys/");
-    const totalfiles = messagesTotal.map(message => message.link);
-    const failed = totalfiles.filter(link => !downloaded.some(file => link != null && link.includes(file)))
-    writeFileSync("./failed.json", JSON.stringify(failed));
-}
-*/

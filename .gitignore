@@ -3,6 +3,7 @@
 /scripts/*.txt
 /scripts/bnuuys/*
 /scripts/out*
+/scripts/sfx.zip
 
 # dependencies
 /node_modules
