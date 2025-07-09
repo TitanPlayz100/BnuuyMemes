@@ -4,7 +4,6 @@
 /scripts/*.json
 /scripts/bnuuys/*
 /scripts/*.zip
-/scripts/thumbnails/
 
 # dependencies
 /node_modules
