@@ -1,9 +1,10 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 /scripts/*.txt
+/scripts/*.json
 /scripts/bnuuys/*
-/scripts/out*
-/scripts/sfx.zip
+/scripts/*.zip
+/scripts/thumbnails/
 
 # dependencies
 /node_modules

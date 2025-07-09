@@ -1,128 +1,42 @@
-"use client"
-import { useEffect, useRef, useState } from "react";
-import FileView from "./components/files";
+import data from '@/public/data.json';
+import Image from 'next/image';
+import Link from 'next/link';
 
 export default function Home() {
-  const [files, setFiles] = useState([]);
-  const [filename, setFilename] = useState("");
-  const inputRef = useRef<HTMLInputElement | null>(null);
-
-  const handleClick = () => {
-    inputRef.current?.click();
-  };
-
-  useEffect(() => {
-    fetchFiles();
-  }, []);
-
-  async function fetchFiles() {
-    const res = await fetch('/api/listfiles');
-    const { files } = await res.json();
-    setFiles(files);
-  }
-
-  async function upload(event: React.ChangeEvent<HTMLInputElement>) {
-    const selectedFile = event.target.files?.[0];
-    if (selectedFile == null) return;
-    setFilename(selectedFile.name);
-
-    const res = await fetch('/api/upload');
-    const { uploadUrl, uploadAuthToken } = await res.json();
-
-    const uploadRes = await fetch(uploadUrl, {
-      method: 'POST',
-      headers: {
-        Authorization: uploadAuthToken,
-        'X-Bz-File-Name': encodeURIComponent(selectedFile.name),
-        'Content-Type': selectedFile.type || 'b2/x-auto',
-        'X-Bz-Content-Sha1': 'do_not_verify',
-      },
-      body: selectedFile,
-    });
-
-    await uploadRes.json();
-
-    fetchFiles();
-  }
-
-  async function uploadFilesFromJson(event: React.ChangeEvent<HTMLInputElement>) {
-    const jsonFile = event.target.files?.[0];
-    if (!jsonFile) return;
-
-    const content = await jsonFile.text();
-    const messages: { name: string, file: string, link: string }[] = JSON.parse(content);
-
-
-    messages.forEach(async ({ name, file, link }) => {
-      const res = await fetch('/api/upload');
-      const { uploadUrl, uploadAuthToken } = await res.json();
-
-      const fileres = await fetch(link);
-      const fileBlob = await fileres.blob();
-
-      const video = new File([fileBlob], file, { type: fileBlob.type || 'b2/x-auto' });
-
-      const uploadres = await fetch(uploadUrl, {
-        method: 'POST',
-        headers: {
-          Authorization: uploadAuthToken,
-          'X-Bz-File-Name': encodeURIComponent(file),
-          'Content-Type': 'b2/x-auto',
-          'X-Bz-Content-Sha1': 'do_not_verify',
-        },
-        body: video,
-      });
-
-      const upload = await uploadres.json();
-      console.log("upload complete", upload)
-    })
-  }
-
-  async function download(filename: string) {
-    const res = await fetch('/api/download', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ filename }),
-    });
-
-    const blob = await res.blob();
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = filename;
-    a.click();
-  }
+  const realdata = data.slice(0, 20);
 
   return (
     <>
-      <div>
-        <button type="button" onClick={handleClick} className="bg-white text-black rounded px-4 py-2 m-4 ml-16 mt-8 border hover:bg-gray-100 transition duration-200 ease-in-out">
-          Upload
-        </button>
-        <input ref={inputRef} type="file" onChange={upload} className="hidden" />
+      <header className="bg-foreground text-text p-5 flex justify-between items-baseline">
+        <Link className="text-5xl text-text-highlight" href="/">BnuuyMemes</Link>
+        <div>
+          <p>By TitanPlayz</p>
+        </div>
+      </header>
+
+      <div className="bg-background-second text-text p-5 m-10">
+        <h1 className="text-2xl text-text-highlight">Search</h1>
       </div>
 
-      <div>
-        <button type="button" onClick={handleClick} className="bg-white text-black rounded px-4 py-2 m-2 ml-16 border hover:bg-gray-100 transition duration-200 ease-in-out">
-          Upload Messages Json
-        </button>
-        <input ref={inputRef} type="file" onChange={uploadFilesFromJson} className="hidden" />
+      <div className='flex flex-wrap m-5 ml-25 mr-25 justify-center pb-5'>
+        {realdata.map((msg, index) => {
+          return <Card key={index} title={msg.name.split('.')[0]} author={msg.author} />
+        })}
       </div>
 
-      <button onClick={() => download(filename)} className="bg-white text-black rounded px-4 py-2 m-2 ml-16 border hover:bg-gray-100 transition duration-200 ease-in-out">
-        download
-      </button>
-
-
-      <div className="m-5 ml-10 flex flex-col justify-center">
-        {files.map((file, index) => (
-          <FileView key={index} file={file} setSelectedFile={setFilename}></FileView>
-        ))}
+      <div className='w-screen p-10 flex align-middle justify-center h-40'>
+        <p className='text-2xl text-text'>Fetching more...</p>
       </div>
-
-      <p className="ml-16">
-        Selected file: {filename}
-      </p>
     </>
-  );
+  )
+}
+
+function Card({ title, author }: { title: string, author: string }) {
+  return (
+    <div className='p-5 m-2 bg-background-second hover:bg-hoverbg w-auto h-auto transition duration-350 hover:duration-50 rounded-2xl'>
+      <Image src={`/thumbnails/${title.split(".")[0]}.png`} alt="thumbnail" width={200} height={200} />
+      <h1 className='text-2xl text-text-highlight mt-2 mb-2 overflow-ellipsis max-w-50 overflow-x-hidden overflow-y-hidden whitespace-nowrap'>{title}</h1>
+      <p className='text-l text-text mt-2 mb-2'>By {author}</p>
+    </div>
+  )
 }
