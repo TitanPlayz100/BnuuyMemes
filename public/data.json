@@ -4,7 +4,7 @@
         "original": "https://discord.com/channels/673303546107658242/917245246449016853/1382977417903210529",
         "type": "video",
         "name": "Gubby but it's a bnuuy edit.mp4",
-        "tags": ["youtube"]
+        "tags": ["youtube", "corrected_thumbnail"]
     },
     {
         "author": "melisek",
@@ -524,7 +524,8 @@
         "author": "tomatofries",
         "original": "https://discord.com/channels/673303546107658242/917245246449016853/1354133737688006758",
         "type": "other",
-        "name": "Windup_Moment.zip"
+        "name": "Windup_Moment.zip",
+        "tags": ["no_thumbnail"]
     },
     {
         "author": "badkittendedmkr",
@@ -561,7 +562,7 @@
         "original": "https://discord.com/channels/673303546107658242/917245246449016853/1354005104457416817",
         "type": "video",
         "name": "rxtile vs garbo.mp4",
-        "tags": ["youtube"]
+        "tags": ["youtube", "corrected_thumbnail"]
     },
     {
         "author": "james_7318",
@@ -816,7 +817,7 @@
         "original": "https://discord.com/channels/673303546107658242/917245246449016853/1323053265113321524",
         "type": "video",
         "name": "square hole - TETR.IO bnuuy.mp4",
-        "tags": ["youtube"]
+        "tags": ["youtube", "corrected_thumbnail"]
     },
     {
         "author": "emheckingnugsoma",
@@ -1238,7 +1239,7 @@
         "original": "https://discord.com/channels/673303546107658242/917245246449016853/1131552900942934118",
         "type": "video",
         "name": "pepsi ad tetrameme.mp4",
-        "tags": ["corrected", "dead"]
+        "tags": ["corrected", "dead", "corrected_thumbnail"]
     },
     {
         "author": "zyrixia",
@@ -1282,7 +1283,7 @@
         "original": "https://discord.com/channels/673303546107658242/917245246449016853/1091864646643875982",
         "type": "other",
         "name": "Kessaptcha_v21680390982.gif",
-        "tags": ["corrected"]
+        "tags": ["corrected", "corrected_thumbnail"]
     },
     {
         "author": "miles77",
@@ -1561,7 +1562,7 @@
         "original": "https://discord.com/channels/673303546107658242/917245246449016853/968147224099946516",
         "type": "other",
         "name": "caption.gif",
-        "tags": ["corrected"]
+        "tags": ["corrected", "corrected_thumbnail"]
     },
     {
         "author": "aznguy.mp4#6666",
@@ -1574,7 +1575,7 @@
         "original": "https://discord.com/channels/673303546107658242/917245246449016853/970173985134370816",
         "type": "other",
         "name": "tted8b.tpse",
-        "tags": ["not_downloaded", "corrected"]
+        "tags": ["not_downloaded", "corrected", "no_thumbnail"]
     },
     {
         "author": "Zyrixia#2492",
@@ -1731,7 +1732,8 @@
         "author": "Zyrixia#2492",
         "original": "https://discord.com/channels/673303546107658242/917245246449016853/927000802122432613",
         "type": "other",
-        "name": "06b23957d2e7203edcdf5b10f08a9ea7.gif"
+        "name": "06b23957d2e7203edcdf5b10f08a9ea7.gif",
+        "tags": ["corrected_thumbnail"]
     },
     {
         "author": "Zyrixia#2492",

@@ -2,41 +2,47 @@ import data from '@/public/data.json';
 import Image from 'next/image';
 import Link from 'next/link';
 
+type Data = {
+  author: string;
+  original: string;
+  type: string;
+  name: string;
+  tags?: string[];
+}
+
 export default function Home() {
-  const realdata = data.slice(0, 20);
+  // const realdata = data.slice(0, 20);
 
   return (
     <>
-      <header className="bg-foreground text-text p-5 flex justify-between items-baseline">
-        <Link className="text-5xl text-text-highlight" href="/">BnuuyMemes</Link>
-        <div>
-          <p>By TitanPlayz</p>
-        </div>
-      </header>
-
       <div className="bg-background-second text-text p-5 m-10">
         <h1 className="text-2xl text-text-highlight">Search</h1>
       </div>
 
       <div className='flex flex-wrap m-5 ml-25 mr-25 justify-center pb-5'>
-        {realdata.map((msg, index) => {
-          return <Card key={index} title={msg.name.split('.')[0]} author={msg.author} />
+        {data.map((msg, index) => {
+          return <Card key={index} msg={msg} />
         })}
       </div>
-
-      <div className='w-screen p-10 flex align-middle justify-center h-40'>
+      {/* 
+      <div id='fetchmore' className='w-screen p-10 flex align-middle justify-center h-40'>
         <p className='text-2xl text-text'>Fetching more...</p>
-      </div>
+      </div> */}
     </>
   )
 }
 
-function Card({ title, author }: { title: string, author: string }) {
+function Card({ msg }: { msg: Data }) {
+  const title = msg.name.split(".")[0];
+  const author = msg.author;
+  const hastn = !(msg.tags?.includes("no_thumbnail") ?? false) && msg.type != "audio"
+  const tn = hastn ? `/thumbnails/${title}.png` : "/placeholder.png";
+
   return (
-    <div className='p-5 m-2 bg-background-second hover:bg-hoverbg w-auto h-auto transition duration-350 hover:duration-50 rounded-2xl'>
-      <Image src={`/thumbnails/${title.split(".")[0]}.png`} alt="thumbnail" width={200} height={200} />
-      <h1 className='text-2xl text-text-highlight mt-2 mb-2 overflow-ellipsis max-w-50 overflow-x-hidden overflow-y-hidden whitespace-nowrap'>{title}</h1>
-      <p className='text-l text-text mt-2 mb-2'>By {author}</p>
-    </div>
+    <Link href={`/bnuuys/${title.split(".")[0]}`} className='m-3 bg-background-second hover:bg-hoverbg w-[200px] h-auto transition duration-350 hover:duration-50 rounded-xl overflow-hidden'>
+      <Image src={tn} alt="thumbnail" width={200} height={200} />
+      <h1 className='text-2xl text-text-highlight m-4  overflow-ellipsis overflow-y-hidden whitespace-nowrap'>{title}</h1>
+      <p className='text-l text-text m-4  overflow-ellipsis overflow-y-hidden whitespace-nowrap'>By {author}</p>
+    </Link>
   )
 }

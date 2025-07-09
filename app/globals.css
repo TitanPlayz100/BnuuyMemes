@@ -16,6 +16,7 @@
   --color-foreground: var(--foreground);
   --color-text: var(--text);
   --color-text-highlight: var(--text-highlighted);
+  --shadow-3xl: box-shadow: 0 0 50px var(--foreground);
 }
 
 body {
