@@ -1630,7 +1630,8 @@
         "author": "Zudo#0800",
         "original": "https://discord.com/channels/673303546107658242/917245246449016853/953982801525473280",
         "type": "text",
-        "name": "how did we even get to this point"
+        "name": "how did we even get to this point",
+        "tags": ["no_thumbnail"]
     },
     {
         "author": "Zyrixia#2492",
@@ -1740,7 +1741,7 @@
         "original": "https://discord.com/channels/673303546107658242/917245246449016853/930439735279763466",
         "type": "video",
         "name": "My_Video34 (1).mp4",
-        "tags": ["dead"]
+        "tags": ["dead", "no_thumbnail"]
     },
     {
         "author": "aznguy.mp4#6666",
@@ -1771,7 +1772,7 @@
         "original": "https://discord.com/channels/673303546107658242/917245246449016853/921180914128683098",
         "type": "video",
         "name": "clunchbobinaweek.mp4",
-        "tags":["dead"]
+        "tags":["dead", "no_thumbnail"]
     },
     {
         "author": "ZaptorZap#0405",

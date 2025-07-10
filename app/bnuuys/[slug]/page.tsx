@@ -1,4 +1,4 @@
-import Back from '@/app/components/backButton';
+import Back from '@/app/bnuuys/[slug]/backButton';
 import data from '@/public/data.json';
 import Image from 'next/image';
 
