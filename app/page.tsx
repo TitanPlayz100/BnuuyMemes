@@ -1,6 +1,7 @@
 "use client"
+
 import data from '@/public/data.json';
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -48,7 +49,7 @@ export default function Home() {
   }
 
   return (
-    <>
+    <Suspense>
       <Search search={search} value={searchTerm} />
       <PageNav changePage={changePage} curPage={clampedPage} maxPage={maxPage} />
 
@@ -57,7 +58,7 @@ export default function Home() {
           return <Card key={index} msg={msg} />
         })}
       </div>
-    </>
+    </Suspense>
   )
 }
 

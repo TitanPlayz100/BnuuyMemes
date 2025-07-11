@@ -33,7 +33,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
             }
             </div>
             <div className='m-5 flex justify-center gap-10 mt-10 mb-10'>
-                <Download />
+                <Download url={mediaURL} name={message.name}/>
                 <a target='_blank' href={message.original} className='text-white hover:text-gray-400 bg-blue hover:bg-hoverblue p-3 w-1/5 text-center rounded-2xl transition'>Original Message</a>
             </div>
             <div className='flex gap-10 justify-center'>
