@@ -49,7 +49,7 @@ export default function Home() {
   }
 
   return (
-    <Suspense>
+    <>
       <Search search={search} value={searchTerm} />
       <PageNav changePage={changePage} curPage={clampedPage} maxPage={maxPage} />
 
@@ -58,7 +58,7 @@ export default function Home() {
           return <Card key={index} msg={msg} />
         })}
       </div>
-    </Suspense>
+    </>
   )
 }
 
