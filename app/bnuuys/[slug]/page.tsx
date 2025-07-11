@@ -6,7 +6,7 @@ import crypto from 'crypto'
 
 const EXPIRY_SECONDS = 60;
 
-export async function fetchURL(name: string) {
+async function fetchURL(name: string) {
     const { SECRET_KEY, BASE_URL }: any = process.env;
     const expires = Math.floor(Date.now() / 1000) + EXPIRY_SECONDS
     const data = `${name}:${expires}`;
