@@ -3,8 +3,8 @@ import "./globals.css";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Bnuuy Site",
-  description: "Created by titanplayz",
+  title: "BnuuyMemes",
+  description: "Memes from tetrio's bnuuy thread, Created by titanplayz",
 };
 
 export default function RootLayout({
@@ -14,9 +14,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="bg-background w-screen h-screen">
+      <body className="bg-background w-screen flex flex-col min-h-screen">
         <Header/>
         {children}
+        <Footer/>
       </body>
     </html>
   );
@@ -31,4 +32,8 @@ function Header() {
       </div>
     </header>
   )
+}
+
+function Footer() {
+  return <p className='text-text ml-10 m-2 opacity-50 mt-auto'>© BnuuySite 2025</p>
 }

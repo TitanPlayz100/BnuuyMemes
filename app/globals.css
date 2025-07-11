@@ -3,7 +3,9 @@
 :root {
   --background: rgb(15, 22, 13);
   --background-secondary: #162113;
+  --background-blue: #5865f2;
   --background-hover: #3a5633;
+  --background-hover-blue: #2e357f;
   --foreground: #659248;
   --text: #A3D391;
   --text-highlighted: #E2FCDE;
@@ -12,7 +14,9 @@
 @theme inline {
   --color-background: var(--background);
   --color-background-second: var(--background-secondary);
+  --color-blue: var(--background-blue);
   --color-hoverbg: var(--background-hover);
+  --color-hoverblue: var(--background-hover-blue);
   --color-foreground: var(--foreground);
   --color-text: var(--text);
   --color-text-highlight: var(--text-highlighted);

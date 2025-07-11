@@ -57,7 +57,6 @@ export default function Home() {
           return <Card key={index} msg={msg} />
         })}
       </div>
-
     </>
   )
 }
@@ -85,7 +84,6 @@ function PageNav({ changePage, curPage, maxPage }: { changePage: (newpage: numbe
       {Array.from({ length: maxPage }).map((_, index) => {
         return <Button key={index} string={(index + 1).toString()} click={() => changePage(index + 1)} selected={curPage == index + 1} />
       })}
-      {/* <span className='text-text text-xl m-5'>Current Page: {curPage}</span> */}
       <Button string={">"} click={() => changePage(curPage + 1)} />
     </div>
   )
@@ -100,8 +98,8 @@ function Card({ msg }: { msg: Data }) {
   return (
     <Link href={`/bnuuys/${title.split(".")[0]}`} className='m-3 bg-background-second hover:bg-hoverbg w-[200px] h-auto transition duration-350 hover:duration-50 rounded-xl overflow-hidden'>
       <Image src={tn} alt="thumbnail" width={200} height={200} loading='lazy' placeholder='empty' unoptimized onError={(e) => { (e.currentTarget as HTMLImageElement).src = "/placeholder.png"; }} />
-      <h1 className='text-2xl text-text-highlight m-4  overflow-ellipsis overflow-y-hidden whitespace-nowrap'>{title}</h1>
-      <p className='text-l text-text m-4  overflow-ellipsis overflow-y-hidden whitespace-nowrap'>By {author}</p>
+      <h1 className='text-2xl text-text-highlight m-4 truncate '>{title}</h1>
+      <p className='text-l text-text m-4 truncate'>By {author}</p>
     </Link>
   )
 }
