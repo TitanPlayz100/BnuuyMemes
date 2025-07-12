@@ -8,9 +8,9 @@ export default function VideoPlayer({ url }: { url: string }) {
     return (
         <>
             {error
-                ? <p>Media is not uploaded (will happen eventually)</p>
+                ? <p >Error with video</p>
                 : (
-                    <video className='max-w-full' width={1000} controls>
+                    <video controls autoPlay>
                         <source src={url} type="video/mp4" onError={() => setError(true)} />
                     </video>
                 )}

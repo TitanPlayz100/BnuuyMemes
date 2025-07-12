@@ -3,6 +3,8 @@ import data from '@/public/data.json';
 import Download from './download';
 import VideoPlayer from './video';
 import crypto from 'crypto'
+import AudioPlayer from './audio';
+import ImageViewer from './image';
 
 const EXPIRY_SECONDS = 60;
 
@@ -21,20 +23,33 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
     const message = data.find(msg => msg.name.split(".")[0] === paramName) ?? { name: "", type: "", original: "", author: "" };
     const mediaURL = await fetchURL(message.name);
     const type = message.type
+    const tags = message.tags ?? [];
+
+    function MediaViewer() {
+        if (tags.includes("not_downloaded") || tags.includes("dead")) {
+            return <p>File not available to download</p>
+        } else if (type == 'video') {
+            return <VideoPlayer url={mediaURL} />
+        } else if (type == 'audio') {
+            return <AudioPlayer url={mediaURL}/>
+        } else if (type == 'image' || type == 'gif') {
+            return <ImageViewer url={mediaURL}/>
+        } else {
+            return <p>File avaiable for download</p>
+        }
+    }
 
     return (
-        <div className='ml-25 mr-25 mt-5 pb-10 text-text text-xl'>
-            
+        <div className='md:ml-25 md:mr-25 mt-5 pb-10 text-text text-xl'>
             <Back />
             <div className='flex w-full justify-center mt-5'>
-                {type == 'video'
-                ? <VideoPlayer url={mediaURL} />
-            : <p>Media is not video (other types coming soon)</p>
-            }
+                <div className='max-w-[75vw] max-h-[75vh] flex justify-center'>
+                    <MediaViewer />
+                </div>
             </div>
-            <div className='m-5 flex justify-center gap-10 mt-10 mb-10'>
-                <Download url={mediaURL} name={message.name}/>
-                <a target='_blank' href={message.original} className='text-white hover:text-gray-400 bg-blue hover:bg-hoverblue p-3 w-1/5 text-center rounded-2xl transition'>Original Message</a>
+            <div className='m-5 flex flex-col md:flex-row items-center justify-center gap-10 mt-10 mb-10'>
+                <Download url={mediaURL} name={message.name} />
+                <a target='_blank' href={message.original} className='text-white hover:text-gray-400 bg-blue hover:bg-hoverblue p-3 w-4/5 md:w-1/5 text-center rounded-2xl transition'>Original Message</a>
             </div>
             <div className='flex gap-10 justify-center'>
                 <p className='w-60 truncate text-right'>{message.name}</p>

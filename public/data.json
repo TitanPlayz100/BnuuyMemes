@@ -1087,7 +1087,8 @@
         "author": "skyccrow",
         "original": "https://discord.com/channels/673303546107658242/917245246449016853/1274248299318083594",
         "type": "image",
-        "name": "image.png"
+        "name": "image1.png",
+        "tags": ["corrected"]
     },
     {
         "author": "miles77",
@@ -1281,7 +1282,7 @@
     {
         "author": "mrmeinept",
         "original": "https://discord.com/channels/673303546107658242/917245246449016853/1091864646643875982",
-        "type": "other",
+        "type": "image",
         "name": "Kessaptcha_v21680390982.gif",
         "tags": ["corrected", "corrected_thumbnail"]
     },
@@ -1560,7 +1561,7 @@
     {
         "author": "Zyrixia#2492",
         "original": "https://discord.com/channels/673303546107658242/917245246449016853/968147224099946516",
-        "type": "other",
+        "type": "image",
         "name": "caption.gif",
         "tags": ["corrected", "corrected_thumbnail"]
     },
@@ -1631,7 +1632,7 @@
         "original": "https://discord.com/channels/673303546107658242/917245246449016853/953982801525473280",
         "type": "text",
         "name": "how did we even get to this point",
-        "tags": ["no_thumbnail"]
+        "tags": ["no_thumbnail", "not_downloaded"]
     },
     {
         "author": "Zyrixia#2492",
@@ -1732,7 +1733,7 @@
     {
         "author": "Zyrixia#2492",
         "original": "https://discord.com/channels/673303546107658242/917245246449016853/927000802122432613",
-        "type": "other",
+        "type": "image",
         "name": "06b23957d2e7203edcdf5b10f08a9ea7.gif",
         "tags": ["corrected_thumbnail"]
     },

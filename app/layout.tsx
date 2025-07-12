@@ -28,7 +28,7 @@ function Header() {
     <header className="bg-foreground text-text p-5 flex justify-between items-baseline">
       <Link className="text-5xl text-text-highlight" href="/">BnuuyMemes</Link>
       <div>
-        <p>By TitanPlayz</p>
+        <p className="hidden md:block">By TitanPlayz</p>
       </div>
     </header>
   )

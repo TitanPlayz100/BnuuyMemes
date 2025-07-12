@@ -1,10 +1,11 @@
 "use client"
 
 import data from '@/public/data.json';
-import { Suspense, useState } from 'react';
+import { search } from 'fast-fuzzy';
+import { useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import Link from 'next/link';
-import Image from 'next/image';
+import PageNav from './pageNav';
+import Card from './cards';
 
 export interface Data {
   author: string;
@@ -16,9 +17,18 @@ export interface Data {
 
 const ITEMS_PER_PAGE = 25;
 
-function getPagenatedData(page: number, search: string): { clampedPage: number, pagedData: Data[], maxPage: number } {
-  const filtered = search == '' ? data : data.filter(msg => msg.name.toLowerCase().includes(search));
+// gets page contents given page, and also clamps pages to 1 - maxPage
+type params = { clampedPage: number, pagedData: Data[], maxPage: number }
+function getPagenatedData(page: number, searchString: string, types: string[]): params {
+  // filtering
+  const typeFiltered = data.filter(msg => types.includes(msg.type));
+  const fuzzied = search(searchString, typeFiltered, {
+    keySelector: (msg) => [msg.name, msg.author],
+    threshold: 0.6,
+  })
+  const filtered = searchString == '' ? typeFiltered : fuzzied;
 
+  // paginate
   const maxPage = Math.ceil((filtered.length - 1) / 25)
   const clampedPage = Math.min(Math.max(Number(page), 1), maxPage);
   const offset = (clampedPage - 1) * ITEMS_PER_PAGE;
@@ -35,7 +45,8 @@ export default function Home() {
 
   const [page, setPage] = useState(requestedPage);
   const [searchTerm, setSearchTerm] = useState(searchParam);
-  const { clampedPage, pagedData, maxPage } = getPagenatedData(Number(page), searchTerm);
+  const [typeFilter, setTypeFilter] = useState(["video", "audio", "image", "other"]);
+  const { clampedPage, pagedData, maxPage } = getPagenatedData(Number(page), searchTerm, typeFilter);
 
   const changePage = (newpage: number) => {
     setPage(newpage);
@@ -43,17 +54,24 @@ export default function Home() {
   }
 
   const search = (word: string) => {
-    const lower = word.toLowerCase()
-    setSearchTerm(lower);
-    router.push(`/?page=${page}&search=${lower}`, { scroll: false });
+    setSearchTerm(word);
+    router.push(`/?page=${page}&search=${word}`, { scroll: false });
+  }
+
+  const toggletype = (type: string) => {
+    setTypeFilter(prev =>
+      prev.includes(type)
+        ? prev.filter(t => t !== type)
+        : [...prev, type]
+    );
   }
 
   return (
     <>
-      <Search search={search} value={searchTerm} />
+      <Search search={search} value={searchTerm} types={typeFilter} toggleType={toggletype} />
       <PageNav changePage={changePage} curPage={clampedPage} maxPage={maxPage} />
 
-      <div className='flex flex-wrap m-5 ml-25 mr-25 justify-center'>
+      <div className='flex flex-wrap m-5 md:ml-25 md:mr-25 justify-center'>
         {pagedData.map((msg, index) => {
           return <Card key={index} msg={msg} />
         })}
@@ -62,45 +80,29 @@ export default function Home() {
   )
 }
 
-function Search({ search, value }: { search: (word: string) => void, value: string }) {
+// simple search at top of page
+type params2 = { search: (word: string) => void, value: string, types: string[], toggleType: (arr: string) => void }
+function Search({ search, value, types, toggleType }: params2) {
+  const [filters, setFilters] = useState(false);
+  const validTypes = ["video", "audio", "image", "other"];
+
   return (
-    <div className="bg-background-second text-text p-5 m-10 flex gap-10">
-      <h1 className="text-2xl text-text-highlight">Search</h1>
+    <div className="bg-background-second text-text p-5 pl-10 m-10 flex gap-5 text-xl">
       <input
         type='text'
         value={value}
-        placeholder='search...'
+        placeholder='Search'
         onInput={(e: any) => search(e.target.value)}
+        className='border border-foreground p-2 rounded-4xl min-w-1/3 outline-none pl-5'
       />
+      <img src='/search.svg' className='w-9 scale-150 translate-y-2' />
+      <div hidden={!filters} className='grow flex justify-end gap-5 mr-5'>
+        {validTypes.map((type, index) => {
+          return <button className='border rounded-xl p-2 hover:bg-hoverbg' style={{ background: types.includes(type) ? "#3a5633" : "transparent" }} onClick={() => toggleType(type)} key={index}>{type}</button>
+
+        })}
+      </div>
+      <button className='ml-auto mr-5 border rounded-xl p-2 hover:bg-hoverbg' onClick={() => setFilters(!filters)}>Filters</button>
     </div>
-  )
-}
-
-function PageNav({ changePage, curPage, maxPage }: { changePage: (newpage: number) => void, curPage: number, maxPage: number }) {
-  const Button = ({ string, click, selected = false }: { string: string, click: any, selected?: boolean }) => <button onClick={click} className={`text-text text-xl m-2 aspect-square h-8  hover:bg-hoverbg border border-foreground rounded-2xl ${selected ? 'bg-hoverbg' : 'bg-background-second'}`}>{string}</button>
-
-  return (
-    <div className='w-screen flex justify-center'>
-      <Button string={"<"} click={() => changePage(curPage - 1)} />
-      {Array.from({ length: maxPage }).map((_, index) => {
-        return <Button key={index} string={(index + 1).toString()} click={() => changePage(index + 1)} selected={curPage == index + 1} />
-      })}
-      <Button string={">"} click={() => changePage(curPage + 1)} />
-    </div>
-  )
-}
-
-function Card({ msg }: { msg: Data }) {
-  const title = msg.name.split(".")[0];
-  const author = msg.author;
-  const hastn = !(msg.tags?.includes("no_thumbnail") ?? false) && msg.type != "audio"
-  const tn = hastn ? `/thumbnails/${title}.png` : "/placeholder.png";
-
-  return (
-    <Link href={`/bnuuys/${title.split(".")[0]}`} className='m-3 bg-background-second hover:bg-hoverbg w-[200px] h-auto transition duration-350 hover:duration-50 rounded-xl overflow-hidden'>
-      <Image src={tn} alt="thumbnail" width={200} height={200} loading='lazy' placeholder='empty' unoptimized onError={(e) => { (e.currentTarget as HTMLImageElement).src = "/placeholder.png"; }} />
-      <h1 className='text-2xl text-text-highlight m-4 truncate '>{title}</h1>
-      <p className='text-l text-text m-4 truncate'>By {author}</p>
-    </Link>
   )
 }

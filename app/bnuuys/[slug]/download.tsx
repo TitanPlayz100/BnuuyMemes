@@ -51,7 +51,7 @@ export default function Download({ url, name }: { url: string, name: string }) {
     }
 
     return (
-        <div className="flex flex-col justify-center w-1/5">
+        <div className="flex flex-col justify-center w-4/5 md:w-1/5">
             <button onClick={download} disabled={isDownloading} className='bg-background-second p-3 w-full text-center rounded-2xl hover:bg-hoverbg transition disabled:bg-background-second'>Download</button>
 
             {isDownloading && (
