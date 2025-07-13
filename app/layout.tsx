@@ -3,6 +3,7 @@ import "./globals.css";
 import Link from "next/link";
 import Image from "next/image";
 import Logo from "./logo";
+import { Analytics } from "@vercel/analytics/next"
 
 export const metadata: Metadata = {
   title: "BnuuyMemes",
@@ -20,6 +21,7 @@ export default function RootLayout({
         <Header />
         {children}
         <Footer />
+        <Analytics/>
       </body>
     </html>
   );

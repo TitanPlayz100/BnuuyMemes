@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@vercel/analytics": "^1.5.0",
     "fast-fuzzy": "^1.12.0",
     "next": "15.3.4",
     "react": "^19.0.0",
