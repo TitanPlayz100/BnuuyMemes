@@ -8,7 +8,7 @@ function PageNavButton({ children, click, selected = false }: params) {
 type params2 = { changePage: (newpage: number) => void, curPage: number, maxPage: number }
 export default function PageNav({ changePage, curPage, maxPage }: params2) {
   return (
-    <div className='w-screen flex flex-wrap justify-center'>
+    <div className='m-5 pl-10 pr-10 flex flex-wrap justify-center bg-background-second '>
       <PageNavButton click={() => changePage(curPage - 1)}>
         <img className="h-6 translate-x-1 translate-y-0.5" src="./left.svg"/>
       </PageNavButton>

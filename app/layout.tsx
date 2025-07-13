@@ -14,7 +14,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="bg-background w-screen flex flex-col min-h-screen">
+      <body className="bg-background w-screen flex flex-col min-h-screen font-tfont font-bold">
         <Header/>
         {children}
         <Footer/>
@@ -25,7 +25,7 @@ export default function RootLayout({
 
 function Header() {
   return (
-    <header className="bg-foreground text-text p-5 flex justify-between items-baseline">
+    <header className="bg-foreground text-text font-hun p-5 flex justify-between items-baseline bg-[url(/header.png)]">
       <Link className="text-5xl text-text-highlight" href="/">BnuuyMemes</Link>
       <div>
         <p className="hidden md:block">By TitanPlayz</p>

@@ -1,7 +1,31 @@
 @import "tailwindcss";
 
+@font-face {
+  font-family: 'Hun';
+  src: url('/hun2.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'TFont';
+  src: url('/cr.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'TFont';
+  src: url('/cb.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+}
+
 :root {
+  --hun: 'Hun', sans-serif;
+  --tfont: 'TFont', sans-serif;
   --background: rgb(15, 22, 13);
+  --background-dark: rgb(10, 15, 9);
   --background-secondary: #162113;
   --background-blue: #5865f2;
   --background-hover: #3a5633;
@@ -12,7 +36,10 @@
 }
 
 @theme inline {
+  --font-hun: var(--hun);
+  --font-tfont: var(--tfont);
   --color-background: var(--background);
+  --color-background-dark: var(--background-dark);
   --color-background-second: var(--background-secondary);
   --color-blue: var(--background-blue);
   --color-hoverbg: var(--background-hover);
@@ -20,9 +47,12 @@
   --color-foreground: var(--foreground);
   --color-text: var(--text);
   --color-text-highlight: var(--text-highlighted);
-  --shadow-3xl: box-shadow: 0 0 50px var(--foreground);
 }
 
 body {
-  font-family: sans-serif;
+  font-family: var(--font-tfont);
+}
+
+.shadow-main {
+  box-shadow: 0 0 10px var(--text);
 }

@@ -69,40 +69,46 @@ export default function Home() {
   return (
     <>
       <Search search={search} value={searchTerm} types={typeFilter} toggleType={toggletype} />
-      <PageNav changePage={changePage} curPage={clampedPage} maxPage={maxPage} />
+      <div className='w-screen flex flex-col items-center mb-5'>
+        <PageNav changePage={changePage} curPage={clampedPage} maxPage={maxPage} />
 
-      <div className='flex flex-wrap m-5 md:ml-25 md:mr-25 justify-center'>
-        {pagedData.map((msg, index) => {
-          return <Card key={index} msg={msg} />
-        })}
+        <div className='flex flex-wrap w-4/5 border-3 border-text shadow-main justify-center bg-background-dark p-5'>
+          {pagedData.map((msg, index) => {
+            return <Card key={index} msg={msg} />
+          })}
+        </div>
       </div>
+
     </>
   )
 }
 
-// simple search at top of page
+
 type params2 = { search: (word: string) => void, value: string, types: string[], toggleType: (arr: string) => void }
 function Search({ search, value, types, toggleType }: params2) {
   const [filters, setFilters] = useState(false);
   const validTypes = ["video", "audio", "image", "other"];
 
   return (
-    <div className="bg-background-second text-text p-5 pl-10 m-10 flex gap-5 text-xl">
-      <input
-        type='text'
-        value={value}
-        placeholder='Search'
-        onInput={(e: any) => search(e.target.value)}
-        className='border border-foreground p-2 rounded-4xl min-w-1/3 outline-none pl-5'
-      />
-      <img src='/search.svg' className='w-9 scale-150 translate-y-2' />
-      <div hidden={!filters} className='grow flex justify-end gap-5 mr-5'>
+    <div className="bg-background-second text-text p-5 pl-10 m-10 mb-5 flex flex-col md:flex-row gap-5 text-xl">
+      <div className='flex gap-5'>
+        <input
+          type='text'
+          value={value}
+          placeholder='Search'
+          onInput={(e: any) => search(e.target.value)}
+          className='border border-foreground p-2 rounded-4xl min-w-1/3 outline-none pl-5'
+        />
+        <img src='/search.svg' className='w-9 scale-150 translate-y-2' />
+      </div>
+
+      <div className={`grow flex  justify-end gap-5 mr-5 transition-all ${filters ? 'opacity-100' : 'opacity-0'}`}>
         {validTypes.map((type, index) => {
-          return <button className='border rounded-xl p-2 hover:bg-hoverbg' style={{ background: types.includes(type) ? "#3a5633" : "transparent" }} onClick={() => toggleType(type)} key={index}>{type}</button>
+          return <button className={`p-2 font-hun text-${types.includes(type) ? 'text-highlight' : 'text'} transition`} onClick={() => toggleType(type)} key={index}>{type}</button>
 
         })}
       </div>
-      <button className='ml-auto mr-5 border rounded-xl p-2 hover:bg-hoverbg' onClick={() => setFilters(!filters)}>Filters</button>
+      <button className='ml-auto mr-5 p-2 font-hun hover:text-text-highlight transition' onClick={() => setFilters(!filters)}>FILTERS</button>
     </div>
   )
 }
