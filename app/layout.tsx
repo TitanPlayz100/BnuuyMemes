@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import Link from "next/link";
+import Image from "next/image";
+import Logo from "./logo";
 
 export const metadata: Metadata = {
   title: "BnuuyMemes",
@@ -15,9 +17,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="bg-background w-screen flex flex-col min-h-screen font-tfont font-bold">
-        <Header/>
+        <Header />
         {children}
-        <Footer/>
+        <Footer />
       </body>
     </html>
   );
@@ -25,8 +27,14 @@ export default function RootLayout({
 
 function Header() {
   return (
-    <header className="bg-foreground text-text font-hun p-5 flex justify-between items-baseline bg-[url(/header.png)]">
-      <Link className="text-5xl text-text-highlight" href="/">BnuuyMemes</Link>
+    <header className="bg-foreground text-text font-hun flex p-2 justify-between items-baseline bg-[url(/res/header.png)]">
+      <div className="flex gap-2 items-center">
+        <Logo/>
+        <Link className="text-5xl text-text-highlight mt-2" href="/">
+          BnuuyMemes
+        </Link>
+      </div>
+
       <div>
         <p className="hidden md:block">By TitanPlayz</p>
       </div>

@@ -3,11 +3,11 @@ import { readFileSync, createReadStream, writeFileSync } from "fs";
 import dotenv from "dotenv"
 dotenv.config({ path: "../.env" });
 
-const { BUCKET_NAME, ACCOUNT_ID, ACCESS_KEY, SECRET_ACCESS_KEY } = process.env
+const { BUCKET_NAME, UPLOAD_URL, ACCESS_KEY, SECRET_ACCESS_KEY } = process.env
 
 const S3 = new S3Client({
   region: "auto",
-  endpoint: `https://${ACCOUNT_ID}.r2.cloudflarestorage.com`,
+  endpoint: UPLOAD_URL,
   credentials: {
     accessKeyId: ACCESS_KEY,
     secretAccessKey: SECRET_ACCESS_KEY,

@@ -10,7 +10,7 @@ export default function PageNav({ changePage, curPage, maxPage }: params2) {
   return (
     <div className='m-5 pl-10 pr-10 flex flex-wrap justify-center bg-background-second '>
       <PageNavButton click={() => changePage(curPage - 1)}>
-        <img className="h-6 translate-x-1 translate-y-0.5" src="./left.svg"/>
+        <img className="h-6 translate-x-1 translate-y-0.5" src="./icons/left.svg"/>
       </PageNavButton>
       {Array.from({ length: maxPage }).map((_, index) => {
         return (
@@ -20,7 +20,7 @@ export default function PageNav({ changePage, curPage, maxPage }: params2) {
         )
       })}
       <PageNavButton click={() => changePage(curPage + 1)}>
-        <img className="h-6 translate-x-1.5 translate-y-0.5" src="./right.svg"/>
+        <img className="h-6 translate-x-1.5 translate-y-0.5" src="./icons/right.svg"/>
       </PageNavButton>
     </div>
   )

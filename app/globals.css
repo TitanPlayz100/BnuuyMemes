@@ -2,21 +2,21 @@
 
 @font-face {
   font-family: 'Hun';
-  src: url('/hun2.ttf') format('truetype');
+  src: url('/fonts/hun2.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'TFont';
-  src: url('/cr.ttf') format('truetype');
+  src: url('/fonts/cr.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'TFont';
-  src: url('/cb.ttf') format('truetype');
+  src: url('/fonts/cb.ttf') format('truetype');
   font-weight: bold;
   font-style: normal;
 }
