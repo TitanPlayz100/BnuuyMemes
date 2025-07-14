@@ -37,6 +37,7 @@ function getPagenatedData(page: number, searchString: string, types: string[]): 
   return { clampedPage, pagedData, maxPage }
 }
 
+
 export default function Home() {
   const router = useRouter();
   const pageParam = useSearchParams().get('page');
@@ -58,6 +59,11 @@ export default function Home() {
     router.push(`/?page=${page}&search=${word}`, { scroll: false });
   }
 
+  const randomPage = () => {
+    const randomMeme = data[Math.floor(Math.random() * data.length)];
+    router.push(`/bnuuys/${randomMeme.name.split(".")[0]}`);
+  }
+
   const toggletype = (type: string) => {
     setTypeFilter(prev =>
       prev.includes(type)
@@ -68,11 +74,11 @@ export default function Home() {
 
   return (
     <>
-      <Search search={search} value={searchTerm} types={typeFilter} toggleType={toggletype} />
+      <Search search={search} value={searchTerm} types={typeFilter} toggleType={toggletype} random={randomPage} />
       <div className='w-screen flex flex-col items-center mb-5'>
         <PageNav changePage={changePage} curPage={clampedPage} maxPage={maxPage} />
 
-        <div className='flex flex-wrap w-4/5 border-3 border-text shadow-main justify-center bg-background-dark p-5'>
+        <div className='flex flex-wrap md:w-4/5 border-3 border-text shadow-main justify-center bg-background-dark pt-5 pb-5 m-6'>
           {pagedData.map((msg, index) => {
             return <Card key={index} msg={msg} />
           })}
@@ -84,8 +90,14 @@ export default function Home() {
 }
 
 
-type params2 = { search: (word: string) => void, value: string, types: string[], toggleType: (arr: string) => void }
-function Search({ search, value, types, toggleType }: params2) {
+type params2 = {
+  search: (word: string) => void,
+  value: string,
+  types: string[],
+  toggleType: (arr: string) => void,
+  random: () => void;
+}
+function Search({ search, value, types, toggleType, random }: params2) {
   const [filters, setFilters] = useState(false);
   const validTypes = ["video", "audio", "image", "other"];
 
@@ -108,7 +120,11 @@ function Search({ search, value, types, toggleType }: params2) {
 
         })}
       </div>
-      <button className='ml-auto mr-5 p-2 font-hun hover:text-text-highlight transition' onClick={() => setFilters(!filters)}>FILTERS</button>
+
+      <div>
+        <button className='ml-auto mr-5 p-2 font-hun hover:text-text-highlight transition' onClick={() => random()}>RANDOM</button>
+        <button className='ml-auto mr-5 p-2 font-hun hover:text-text-highlight transition' onClick={() => setFilters(!filters)}>FILTERS</button>
+      </div>
     </div>
   )
 }

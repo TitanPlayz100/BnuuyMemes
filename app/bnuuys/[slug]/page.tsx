@@ -5,6 +5,7 @@ import VideoPlayer from './video';
 import crypto from 'crypto'
 import AudioPlayer from './audio';
 import ImageViewer from './image';
+import Random from './randButton';
 
 const EXPIRY_SECONDS = 60;
 
@@ -42,6 +43,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
     return (
         <div className='md:ml-25 md:mr-25 mt-5 pb-10 text-text text-xl'>
             <Back />
+            <Random data={data} />
             <div className='flex w-full justify-center mt-5'>
                 <div className='max-w-[75vw] max-h-[75vh] flex justify-center'>
                     <MediaViewer />
@@ -51,9 +53,9 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
                 <Download url={mediaURL} name={message.name} />
                 <a target='_blank' href={message.original} className='text-white hover:text-gray-400 bg-blue hover:bg-hoverblue p-3 w-4/5 md:w-1/5 text-center rounded-2xl transition'>Original Message</a>
             </div>
-            <div className='flex gap-10 justify-center'>
-                <p className='w-60 truncate text-right'>{message.name}</p>
-                <p className='w-60 truncate text-left opacity-70'>By: {message.author}</p>
+            <div className='flex gap-10 justify-center flex-col md:flex-row items-center text-center'>
+                <p className='w-60 truncate md:text-right'>{message.name}</p>
+                <p className='w-60 truncate md:text-left opacity-70'>By: {message.author}</p>
             </div>
         </div>
     )
