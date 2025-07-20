@@ -5,7 +5,7 @@ import { Data } from "./page";
 export default function Card({ msg }: { msg: Data }) {
   const title = msg.name.split(".")[0];
   const author = msg.author;
-  const hastn = !(msg.tags?.includes("no_thumbnail") ?? false)
+  const hastn = !(msg.meta?.includes("no_thumbnail") ?? false)
   let tn;
   if (!hastn) {
     tn = "/res/placeholder.png";

@@ -6,6 +6,7 @@ import crypto from 'crypto'
 import AudioPlayer from './audio';
 import ImageViewer from './image';
 import Random from './randButton';
+import { Data } from '@/app/page';
 
 const EXPIRY_SECONDS = 60;
 
@@ -21,20 +22,21 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
     const { slug } = await params;
     const paramName = decodeURI(slug);
 
-    const message = data.find(msg => msg.name.split(".")[0] === paramName) ?? { name: "", type: "", original: "", author: "" };
+    const message: Data = data.find(msg => msg.name.split(".")[0] === paramName) ?? { name: "", type: "", original: "", author: "" };
     const mediaURL = await fetchURL(message.name);
     const type = message.type
-    const tags = message.tags ?? [];
+    const metatags = message.meta ?? [];
+    const tags = message.tags ?? undefined;
 
     function MediaViewer() {
-        if (tags.includes("not_downloaded") || tags.includes("dead")) {
+        if (metatags.includes("not_downloaded")) {
             return <p>File not available to download</p>
         } else if (type == 'video') {
             return <VideoPlayer url={mediaURL} />
         } else if (type == 'audio') {
-            return <AudioPlayer url={mediaURL}/>
+            return <AudioPlayer url={mediaURL} />
         } else if (type == 'image' || type == 'gif') {
-            return <ImageViewer url={mediaURL}/>
+            return <ImageViewer url={mediaURL} />
         } else {
             return <p>File avaiable for download</p>
         }
@@ -46,7 +48,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
             <Random data={data} />
             <div className='flex w-full justify-center mt-5'>
                 <div className='max-w-[75vw] max-h-[75vh] flex justify-center'>
-                    <MediaViewer />
+                    <MediaViewer key={slug} />
                 </div>
             </div>
             <div className='m-5 flex flex-col md:flex-row items-center justify-center gap-10 mt-10 mb-10'>
@@ -57,6 +59,15 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
                 <p className='w-60 truncate md:text-right'>{message.name}</p>
                 <p className='w-60 truncate md:text-left opacity-70'>By: {message.author}</p>
             </div>
+            {tags && (
+                <div className='mt-5 flex gap-4 justify-center flex-col md:flex-row items-center text-center'>
+                    <p>Tags: </p>
+                    {tags.map((tag, index) => {
+                        return <div key={index} className='bg-foreground text-text-highlight p-1 pl-3 pr-3 rounded-4xl'>{tag}</div>
+                    })}
+                </div>
+            )}
+
         </div>
     )
 }

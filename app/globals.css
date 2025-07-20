@@ -47,6 +47,7 @@
   --color-foreground: var(--foreground);
   --color-text: var(--text);
   --color-text-highlight: var(--text-highlighted);
+  /* todo add tag colours */
 }
 
 body {

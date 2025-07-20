@@ -1,17 +1,22 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 export default function AudioPlayer({ url }: { url: string }) {
     const [error, setError] = useState(false);
+    const [srcurl, setSrc] = useState("");
+
+    useEffect(() => {
+        setSrc(url)
+    }, [])
 
     return (
         <>
             {error
-                ? <p>Error with audio</p>
-                : (
-                    <audio controls autoPlay>
-                        <source src={url} onError={() => setError(true)} />
+                ? <p >Error with video</p>
+                : srcurl && (
+                    <audio controls autoPlay onError={() => setError(true)}>
+                        <source src={srcurl} />
                     </audio>
                 )}
         </>
