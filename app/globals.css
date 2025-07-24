@@ -31,6 +31,7 @@
   --background-hover: #3a5633;
   --background-hover-blue: #2e357f;
   --foreground: #659248;
+  --foreground-second: #2f471f;
   --text: #A3D391;
   --text-highlighted: #E2FCDE;
 }
@@ -45,6 +46,7 @@
   --color-hoverbg: var(--background-hover);
   --color-hoverblue: var(--background-hover-blue);
   --color-foreground: var(--foreground);
+  --color-foreground-second: var(--foreground-second);
   --color-text: var(--text);
   --color-text-highlight: var(--text-highlighted);
   /* todo add tag colours */

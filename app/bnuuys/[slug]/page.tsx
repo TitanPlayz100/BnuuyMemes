@@ -60,10 +60,10 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
                 <p className='w-60 truncate md:text-left opacity-70'>By: {message.author}</p>
             </div>
             {tags && (
-                <div className='mt-5 flex gap-4 justify-center flex-col md:flex-row items-center text-center'>
+                <div className='mx-5 md:mx-40 mt-10 flex flex-wrap gap-3 justify-center md:flex-row items-center text-center'>
                     <p>Tags: </p>
                     {tags.map((tag, index) => {
-                        return <div key={index} className='bg-foreground text-text-highlight p-1 pl-3 pr-3 rounded-4xl'>{tag}</div>
+                        return <div key={index} className='bg-foreground-second text-text p-1 px-3 rounded-4xl'>{tag}</div>
                     })}
                 </div>
             )}
