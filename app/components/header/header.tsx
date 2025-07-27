@@ -1,16 +1,17 @@
 import Link from "next/link";
 import Logo from "./logo";
 import Image from "next/image";
-import LoginButton from "./loginbutton";
+import { createClient } from '@/db/dbServer'
+import Logout from './logout'
 
 export default async function Header() {
+    const supabase = await createClient()
+    const { data } = await supabase.auth.getUser();
     return (
-        <header className="bg-foreground text-text font-hun flex p-2 justify-between bg-[url(/res/header.png)]">
+        <header className="bg-foreground text-text font-hun flex p-2 pr-4 justify-between bg-[url(/res/header.png)]">
             <div className="flex gap-2 items-center">
                 <Logo />
-                <Link className="text-2xl md:text-4xl text-text-highlight mt-2" href="/">
-                    BNUUYMEMES
-                </Link>
+                <Link className="text-2xl md:text-4xl text-text-highlight mt-2" href="/">BNUUYMEMES</Link>
             </div>
 
             <div className="hidden md:flex items-center gap-5">
@@ -24,7 +25,7 @@ export default async function Header() {
                     <p>BY TITANPLAYZ</p>
                 </Link>
                 
-                {/* <LoginButton/> todo add back once auth is done */}
+                {data.user ? <Logout /> : <Link href="/login" className="hover:brightness-200">LOGIN</Link>}
             </div>
         </header>
     )

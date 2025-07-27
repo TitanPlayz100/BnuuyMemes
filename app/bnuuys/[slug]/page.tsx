@@ -1,12 +1,11 @@
-import Back from '@/app/bnuuys/[slug]/backButton';
-import data from '@/public/data.json';
-import Download from './download';
-import VideoPlayer from './video';
 import crypto from 'crypto'
-import AudioPlayer from './audio';
-import ImageViewer from './image';
-import Random from './randButton';
-import { Data } from '@/app/page';
+import { getMedia } from '@/db/getMedia';
+import Back from '@/app/components/bnuuy_page/backButton';
+import Download from '../../components/bnuuy_page/download';
+import VideoPlayer from '../../components/bnuuy_page/video';
+import AudioPlayer from '../../components/bnuuy_page/audio';
+import ImageViewer from '../../components/bnuuy_page/image';
+import Random from '../../components/bnuuy_page/randButton';
 
 const EXPIRY_SECONDS = 60;
 
@@ -22,7 +21,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
     const { slug } = await params;
     const paramName = decodeURI(slug);
 
-    const message: Data = data.find(msg => msg.name.split(".")[0] === paramName) ?? { name: "", type: "", original: "", author: "" };
+    const message = getMedia(paramName)
     const mediaURL = await fetchURL(message.name);
     const type = message.type
     const metatags = message.meta ?? [];
@@ -45,7 +44,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
     return (
         <div className='md:ml-25 md:mr-25 mt-5 pb-10 text-text text-xl'>
             <Back />
-            <Random data={data} />
+            <Random />
             <div className='flex w-full justify-center mt-5'>
                 <div className='max-w-[75vw] max-h-[75vh] flex justify-center'>
                     <MediaViewer key={slug} />

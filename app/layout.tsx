@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { Analytics } from "@vercel/analytics/next"
-import Header from "./header";
+import Header from "./components/header/header";
 
 export const metadata: Metadata = {
   title: "BnuuyMemes",
@@ -16,10 +16,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="bg-background w-screen flex flex-col min-h-screen font-tfont font-bold overflow-x-hidden">
+        <Analytics />
         <Header />
         {children}
         <Footer />
-        <Analytics />
       </body>
     </html>
   );
