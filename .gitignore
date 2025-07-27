@@ -2,8 +2,8 @@
 
 /scripts/*.zip
 /scripts/*.txt
+/scripts/*.json
 /workers
-
 
 # dependencies
 /node_modules

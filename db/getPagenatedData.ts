@@ -1,7 +1,8 @@
+import { createClient, PostgrestError } from '@supabase/supabase-js';
 import { search } from 'fast-fuzzy';
-import data from '@/public/data.json';
 
 export interface Data {
+    id: number,
     author: string,
     original: string,
     type: string,
@@ -12,29 +13,45 @@ export interface Data {
 
 const ITEMS_PER_PAGE = 25;
 
-export function getPagenatedData(
+const supabase = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+);
+
+export async function getPaginatedData(
     page: number,
     searchString: string,
     tags: string[]
-): {
-    curPage: number,
-    pagedData: Data[],
-    maxPage: number
-} {
-    // filtering
-    const typeFiltered = data.filter(msg => tags.every(t => [msg.type, msg.tags].includes(t)));
-    const fuzzied = search(searchString, typeFiltered, {
-        keySelector: (msg) => [msg.name, msg.author],
-        threshold: 0.6,
-    })
-    const filtered = searchString == '' ? typeFiltered : fuzzied;
+): Promise<{
+    curPage: number;
+    pagedData: Data[];
+    maxPage: number;
+} | {
+    error: PostgrestError
+}> {
+    let query = supabase
+        .from('media')
+        .select('*');
+
+    if (tags.length > 0) {
+        tags.forEach(tag => query = query.contains('tags', [tag]));
+    }
+
+    const { data, error } = await query;
+    if (error || !data) return { error };
+
+    // Fuzzy search
+    const filtered = searchString
+        ? search(searchString, data, {
+            keySelector: (msg) => [msg.name, msg.author],
+            threshold: 0.6,
+        }) : data;
 
     // paginate
     const maxPage = Math.ceil((filtered.length - 1) / 25)
     const clampedPage = Math.min(Math.max(Number(page), 1), maxPage);
     const offset = (clampedPage - 1) * ITEMS_PER_PAGE;
-
-    // get data
     const pagedData = filtered.slice(offset, offset + ITEMS_PER_PAGE);
+
     return { curPage: clampedPage, pagedData, maxPage }
 }

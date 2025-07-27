@@ -1,7 +1,8 @@
 import PageNav from './components/main/pageNav';
 import Card from './components/main/cards';
 import Search from './components/main/search';
-import { getPagenatedData } from '@/db/getPagenatedData';
+import { getPaginatedData } from '@/db/getPagenatedData';
+import ErrorBlock from './components/errorblock';
 
 export interface RootParams {
   page?: string;
@@ -15,15 +16,24 @@ export default async function Home({ searchParams }: { searchParams: Promise<Roo
   const searchTerm = params?.search ?? '';
   const tags = params?.tags?.split(',') ?? [];
 
-  const { curPage, pagedData, maxPage } = getPagenatedData(Number(page), searchTerm, tags);
+  const data = await getPaginatedData(page, searchTerm, tags);
+
+  if ('error' in data) {
+    return <>
+      <Search params={params} />
+      <div className='w-screen flex flex-col items-center mb-5'>
+        <ErrorBlock error={data.error} />
+      </div>
+    </>
+  }
 
   return (
     <>
       <Search params={params} />
       <div className='w-screen flex flex-col items-center mb-5'>
-        <PageNav params={params} curPage={curPage} maxPage={maxPage} />
+        <PageNav params={params} curPage={data.curPage} maxPage={data.maxPage} />
         <div className='flex flex-wrap md:w-4/5 border-3 border-text shadow-main justify-center bg-background-dark pt-5 pb-5 m-6'>
-          {pagedData.map((msg, index) => {
+          {data.pagedData.map((msg, index) => {
             return <Card key={index} msg={msg} />
           })}
         </div>

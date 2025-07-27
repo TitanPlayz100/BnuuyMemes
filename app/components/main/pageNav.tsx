@@ -7,7 +7,10 @@ import { RootParams } from "@/app/page";
 type params2 = { params: RootParams, curPage: number, maxPage: number }
 export default function PageNav({ params, curPage, maxPage }: params2) {
   const newUrl = (newPage: number) => {
-    return `/?page=${newPage}&search=${params.search ?? ''}`;
+    const pageParams = new URLSearchParams({page: newPage.toString()});
+    if (params.search) pageParams.set('search', params.search);
+
+    return `/?${pageParams.toString()}`;
   }
 
   function renderPageButtons() {

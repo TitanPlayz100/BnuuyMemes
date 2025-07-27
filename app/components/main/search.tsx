@@ -17,7 +17,7 @@ export default function Search({ params }: { params: RootParams}) {
 
   const random = () => {
     const randomMeme = getRandomMeme();
-    router.push(`/bnuuys/${randomMeme.name.split(".")[0]}`);
+    router.push(`/bnuuys/${randomMeme}`);
   }
 
   return (

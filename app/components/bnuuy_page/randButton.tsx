@@ -7,7 +7,7 @@ export default function Random() {
     const router = useRouter();
     const random = () => {
         const randomMeme = getRandomMeme();
-        router.push(`/bnuuys/${randomMeme.name.split(".")[0]}`);
+        router.push(`/bnuuys/${randomMeme}`);
     }
     
     return <button onClick={() => random()} className="p-3 m-1 ml-5 w-30 rounded-2xl bg-background-second hover:bg-hoverbg transition">RANDOM</button>

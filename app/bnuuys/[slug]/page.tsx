@@ -6,6 +6,7 @@ import VideoPlayer from '../../components/bnuuy_page/video';
 import AudioPlayer from '../../components/bnuuy_page/audio';
 import ImageViewer from '../../components/bnuuy_page/image';
 import Random from '../../components/bnuuy_page/randButton';
+import ErrorBlock from '@/app/components/errorblock';
 
 const EXPIRY_SECONDS = 60;
 
@@ -13,19 +14,28 @@ async function fetchURL(name: string) {
     const { SECRET_KEY, BASE_URL }: any = process.env;
     const expires = Math.floor(Date.now() / 1000) + EXPIRY_SECONDS
     const data = `${name}:${expires}`;
-    const sig = crypto.createHmac('sha256', SECRET_KEY).update(data).digest('hex')
+    const sig = crypto.createHmac('sha256', SECRET_KEY).update(data).digest('hex');
     return `${BASE_URL}/${name}?expires=${expires}&sig=${sig}`
 }
 
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
     const { slug } = await params;
-    const paramName = decodeURI(slug);
+    const id = Number(slug);
 
-    const message = getMedia(paramName)
-    const mediaURL = await fetchURL(message.name);
-    const type = message.type
-    const metatags = message.meta ?? [];
-    const tags = message.tags ?? undefined;
+    const data = await getMedia(id);
+
+    if ('error' in data) {
+        return <div className='md:ml-25 md:mr-25 mt-5 pb-10 text-text text-xl'>
+            <Back />
+            <Random />
+            <ErrorBlock error={data.error} />
+        </div>
+    }
+
+    const mediaURL = await fetchURL(data.name);
+    const type = data.type
+    const metatags = data.meta ?? [];
+    const tags = data.tags ?? undefined;
 
     function MediaViewer() {
         if (metatags.includes("not_downloaded")) {
@@ -51,12 +61,12 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
                 </div>
             </div>
             <div className='m-5 flex flex-col md:flex-row items-center justify-center gap-10 mt-10 mb-10'>
-                <Download url={mediaURL} name={message.name} />
-                <a target='_blank' href={message.original} className='text-white hover:text-gray-400 bg-blue hover:bg-hoverblue p-3 w-4/5 md:w-1/5 text-center rounded-2xl transition'>Original Message</a>
+                <Download url={mediaURL} name={data.name} />
+                <a target='_blank' href={data.original} className='text-white hover:text-gray-400 bg-blue hover:bg-hoverblue p-3 w-4/5 md:w-1/5 text-center rounded-2xl transition'>Original Message</a>
             </div>
             <div className='flex gap-10 justify-center flex-col md:flex-row items-center text-center'>
-                <p className='w-60 truncate md:text-right'>{message.name}</p>
-                <p className='w-60 truncate md:text-left opacity-70'>By: {message.author}</p>
+                <p className='w-60 truncate md:text-right'>{data.name}</p>
+                <p className='w-60 truncate md:text-left opacity-70'>By: {data.author}</p>
             </div>
             {tags && (
                 <div className='mx-5 md:mx-40 mt-10 flex flex-wrap gap-3 justify-center md:flex-row items-center text-center'>

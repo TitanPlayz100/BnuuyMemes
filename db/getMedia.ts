@@ -1,8 +1,18 @@
-import data from '@/public/data.json';
 import { Data } from './getPagenatedData';
+import { createClient, PostgrestError } from '@supabase/supabase-js';
 
-export function getMedia(name: string): Data {
-    return data
-        .find(msg => msg.name.split(".")[0] === name)
-        ?? { name: "", type: "", original: "", author: "" };
+const supabase = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+);
+
+export async function getMedia(id: number): Promise<Data | { error: PostgrestError }> {
+    const { data, error } = await supabase
+        .from('media')
+        .select('*')
+        .eq('id', id)
+        .single();
+
+    if (error || !data) return { error } as { error: PostgrestError };
+    return data;
 }
