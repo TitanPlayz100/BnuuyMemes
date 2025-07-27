@@ -15,8 +15,8 @@ export default function Search({ params }: { params: RootParams}) {
     router.replace(`/?page=${params.page}&search=${value}`, { scroll: false });
   }
 
-  const random = () => {
-    const randomMeme = getRandomMeme();
+  const random = async () => {
+    const randomMeme = await getRandomMeme();
     router.push(`/bnuuys/${randomMeme}`);
   }
 

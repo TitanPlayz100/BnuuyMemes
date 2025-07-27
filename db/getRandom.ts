@@ -1,3 +1,5 @@
+"use server"
+
 import { createClient, PostgrestError } from '@supabase/supabase-js';
 
 const supabase = createClient(

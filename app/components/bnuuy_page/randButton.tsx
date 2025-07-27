@@ -5,8 +5,8 @@ import { useRouter } from "next/navigation"
 
 export default function Random() {
     const router = useRouter();
-    const random = () => {
-        const randomMeme = getRandomMeme();
+    const random = async () => {
+        const randomMeme = await getRandomMeme();
         router.push(`/bnuuys/${randomMeme}`);
     }
     
