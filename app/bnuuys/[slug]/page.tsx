@@ -5,7 +5,7 @@ import Download from '../../components/bnuuy_page/download';
 import VideoPlayer from '../../components/bnuuy_page/video';
 import AudioPlayer from '../../components/bnuuy_page/audio';
 import ImageViewer from '../../components/bnuuy_page/image';
-import Random from '../../components/bnuuy_page/randButton';
+import Random from '../../components/randButton';
 import ErrorBlock from '@/app/components/errorblock';
 
 const EXPIRY_SECONDS = 60;
@@ -27,7 +27,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
     if ('error' in data) {
         return <div className='md:ml-25 md:mr-25 mt-5 pb-10 text-text text-xl'>
             <Back />
-            <Random />
+            <Random className="p-3 m-1 ml-5 w-30 rounded-2xl bg-background-second hover:bg-hoverbg transition" />
             <ErrorBlock error={data.error} />
         </div>
     }
@@ -54,7 +54,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
     return (
         <div className='md:ml-25 md:mr-25 mt-5 pb-10 text-text text-xl'>
             <Back />
-            <Random />
+            <Random className="p-3 m-1 ml-5 w-30 rounded-2xl bg-background-second hover:bg-hoverbg transition" />
             <div className='flex w-full justify-center mt-5'>
                 <div className='max-w-[75vw] max-h-[75vh] flex justify-center'>
                     <MediaViewer key={slug} />

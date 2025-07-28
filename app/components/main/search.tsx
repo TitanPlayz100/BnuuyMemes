@@ -1,9 +1,10 @@
 'use client'
 
 import { RootParams } from "@/app/page";
-import { getRandomMeme } from "@/db/getRandom";
+import { getCount } from "@/db/getCount";
 import { useRouter } from "next/navigation";
 import { startTransition, useState, useTransition } from "react";
+import Random from "../randButton";
 
 export default function Search({ params }: { params: RootParams }) {
   const [value, setValue] = useState(params.search ?? "");
@@ -20,10 +21,12 @@ export default function Search({ params }: { params: RootParams }) {
     })
   }
 
-  const random = async () => {
-    const randomMeme = await getRandomMeme();
-    router.push(`/bnuuys/${randomMeme}`);
-  }
+  // const random = async () => {
+  //   const data = await getCount();
+  //   if ('error' in data) return;
+  //   const random = Math.floor(Math.random() * data.total);
+  //   router.push(`/bnuuys/${random}`);
+  // }
 
   return (
     <div className="bg-background-second text-text p-5 pl-10 m-10 mb-5 flex flex-col md:flex-row gap-5 text-xl transition">
@@ -48,7 +51,8 @@ export default function Search({ params }: { params: RootParams }) {
       </div> */}
       <div className="grow"></div>
       <div>
-        <button className='ml-auto mr-5 p-2 font-hun hover:text-text-highlight transition' onClick={() => random()}>RANDOM</button>
+        <Random className='ml-auto mr-5 p-2 font-hun hover:text-text-highlight transition' />
+        {/* <button  onClick={() => random()}>RANDOM</button> */}
         {/* <button className='ml-auto mr-5 p-2 font-hun hover:text-text-highlight transition' onClick={() => {}}>FILTERS</button> */}
       </div>
     </div>

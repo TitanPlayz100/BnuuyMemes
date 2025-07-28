@@ -58,8 +58,6 @@ export const getPaginatedData = unstable_cache(
 
         return { curPage: clampedPage, pagedData, maxPage }
     },
-    ['paginated-data'], // cache key parts
-    {
-        tags: ['media'], // revalidate when related tags are invalidated
-    }
+    ['paginated-data'],
+    { tags: ['media'] }
 );
