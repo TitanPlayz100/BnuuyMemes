@@ -8,6 +8,7 @@ export interface Data {
     original: string,
     type: string,
     name: string,
+    like_count: number,
     meta?: string[],
     tags?: string[]
 }
@@ -60,6 +61,5 @@ export const getPaginatedData = unstable_cache(
     ['paginated-data'], // cache key parts
     {
         tags: ['media'], // revalidate when related tags are invalidated
-        revalidate: 3600 // optional: revalidate after 1 hour
     }
 );

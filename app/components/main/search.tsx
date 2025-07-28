@@ -3,16 +3,21 @@
 import { RootParams } from "@/app/page";
 import { getRandomMeme } from "@/db/getRandom";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { startTransition, useState, useTransition } from "react";
 
-export default function Search({ params }: { params: RootParams}) {
+export default function Search({ params }: { params: RootParams }) {
   const [value, setValue] = useState(params.search ?? "");
+  const [loading, setLoading] = useTransition()
   const router = useRouter();
 
   const changeValue = (word: string) => setValue(word);
 
   const search = () => {
-    router.replace(`/?page=${params.page}&search=${value}`, { scroll: false });
+    setLoading(() => {
+      const pageParams = new URLSearchParams({ search: value });
+      if (params.page) pageParams.set('page', params.page);
+      router.replace(`/?${pageParams.toString()}`, { scroll: false });
+    })
   }
 
   const random = async () => {
@@ -32,6 +37,7 @@ export default function Search({ params }: { params: RootParams}) {
           className='border border-foreground p-2 rounded-4xl min-w-1/3 outline-none pl-5'
         />
         <img src='/icons/search.svg' onClick={search} className='w-9 scale-150 translate-y-2 cursor-pointer' />
+        {loading && <div className="p-2 text-foreground animate-pulse">Searching...</div>}
       </div>
       {/* 
       <div className={`grow flex transition-discrete flex-wrap justify-end gap-5 mr-5 transition-all ${filters ? 'opacity-100 max-h-auto' : 'opacity-0 max-h-0 pointer-events-none'}`}>
