@@ -1,4 +1,4 @@
-import { Data } from "@/db/getPagenatedData";
+import { Data } from "@/db/media/getPagenatedData";
 import Image from "next/image";
 import Link from "next/link";
 

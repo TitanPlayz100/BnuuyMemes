@@ -1,7 +1,7 @@
 import PageNav from './components/main/pageNav';
 import Card from './components/main/cards';
 import Search from './components/main/search';
-import { getPaginatedData } from '@/db/getPagenatedData';
+import { getPaginatedData } from '@/db/media/getPagenatedData';
 import ErrorBlock from './components/errorblock';
 
 export interface RootParams {
@@ -12,13 +12,13 @@ export interface RootParams {
 
 export default async function Home({ searchParams }: { searchParams: Promise<RootParams> }) {
   const params = await searchParams;
-  const page = Number(params?.page) || 1;
-  const searchTerm = params?.search ?? '';
-  const tags = params?.tags?.split(',') ?? [];
+  const page = Number(params.page) || 1;
+  const searchTerm = params.search ?? '';
+  const tags = params.tags?.split(',') ?? [];
 
   const data = await getPaginatedData(page, searchTerm, tags);
 
-  if ('error' in data) {
+  if ('error' in data && data.error) {
     return <>
       <Search params={params} />
       <div className='w-screen flex flex-col items-center mb-5'>

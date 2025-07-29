@@ -1,5 +1,5 @@
 import crypto from 'crypto'
-import { getMedia } from '@/db/getMedia';
+import { getMedia } from '@/db/media/getMedia';
 import Back from '@/app/components/bnuuy_page/backButton';
 import Download from '../../components/bnuuy_page/download';
 import VideoPlayer from '../../components/bnuuy_page/video';
@@ -7,6 +7,10 @@ import AudioPlayer from '../../components/bnuuy_page/audio';
 import ImageViewer from '../../components/bnuuy_page/image';
 import Random from '../../components/randButton';
 import ErrorBlock from '@/app/components/errorblock';
+import { getLikes } from '@/db/likes/get_likes';
+import { getMediaTags } from '@/db/tags/media_tags';
+import { hasUserLikedMedia } from '@/db/likes/get_user_liked_media';
+import { AddTag } from '@/app/components/bnuuy_page/addtag';
 
 const EXPIRY_SECONDS = 60;
 
@@ -22,7 +26,11 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
     const { slug } = await params;
     const id = Number(slug);
 
-    const data = await getMedia(id);
+    const [data, tag_data, userLiked] = await Promise.all([
+        getMedia(id),
+        getMediaTags(id),
+        hasUserLikedMedia(id)
+    ])
 
     if ('error' in data) {
         return <div className='md:ml-25 md:mr-25 mt-5 pb-10 text-text text-xl'>
@@ -35,7 +43,10 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
     const mediaURL = await fetchURL(data.name);
     const type = data.type
     const metatags = data.meta ?? [];
-    const tags = data.tags ?? undefined;
+    const tags = 'error' in tag_data ? [] : [...new Set(tag_data.map(t => t.tags.tag))];
+    const likes = data.like_count;
+    const liked = typeof userLiked === 'boolean' ? userLiked: false;
+
 
     function MediaViewer() {
         if (metatags.includes("not_downloaded")) {
@@ -68,15 +79,17 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
                 <p className='w-60 truncate md:text-right'>{data.name}</p>
                 <p className='w-60 truncate md:text-left opacity-70'>By: {data.author}</p>
             </div>
+            <div>Likes: {likes}</div>
+            <div>You have {liked ? 'liked': 'not liked'} this</div>
             {tags && (
                 <div className='mx-5 md:mx-40 mt-10 flex flex-wrap gap-3 justify-center md:flex-row items-center text-center'>
                     <p>Tags: </p>
                     {tags.map((tag, index) => {
                         return <div key={index} className='bg-foreground-second text-text p-1 px-3 rounded-4xl'>{tag}</div>
                     })}
+                    <AddTag mediaId={id}/>
                 </div>
             )}
-
         </div>
     )
 }

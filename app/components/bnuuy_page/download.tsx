@@ -12,13 +12,10 @@ export default function Download({ url, name }: { url: string, name: string }) {
             setProgress(0);
 
             const res = await fetch(url);
-            // if (!res.ok) throw new Error("Download failed");
-
             const total = Number(res.headers.get('Content-Length'));
             const reader = res.body?.getReader();
             const chunks: Uint8Array[] = [];
             let received = 0;
-
 
             while (true && reader) {
                 const { done, value } = await reader.read();
