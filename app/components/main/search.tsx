@@ -4,12 +4,17 @@ import { RootParams } from "@/app/page";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import Random from "../randButton";
+import { AddFilter } from "./addFilter";
 
-export default function Search({ params }: { params: RootParams }) {
+export default function Search({ params, tagList, mediaCount }:
+  { params: RootParams, tagList: string[], mediaCount: number }
+) {
   const [value, setValue] = useState(params.search ?? "");
-  const [viewFilters, setViewFilters] = useState(false);
+  const [viewFilters, setViewFilters] = useState(!!params.tags);
   const [loading, setLoading] = useTransition()
   const router = useRouter();
+
+  const tags = params.tags?.split(',') ?? [];
 
   const changeValue = (word: string) => setValue(word);
 
@@ -19,6 +24,16 @@ export default function Search({ params }: { params: RootParams }) {
       if (params.page) pageParams.set('page', params.page);
       router.replace(`/?${pageParams.toString()}`, { scroll: false });
     })
+  }
+
+  const remove = async (name: string) => {
+    const oldTags = params.tags?.split(',') ?? [];
+    const newTags = oldTags.filter(t => t != name).join(',')
+    const pageParams = new URLSearchParams();
+    if (newTags.length > 0) pageParams.set('tags', newTags);
+    if (params.page) pageParams.set('page', params.page);
+    if (params.search) pageParams.set('search', params.search);
+    router.replace(`/?${pageParams.toString()}`, { scroll: false });
   }
 
   return (
@@ -36,20 +51,21 @@ export default function Search({ params }: { params: RootParams }) {
         {loading && <div className="p-2 text-foreground animate-pulse">Searching...</div>}
       </div>
       <div className="ml-auto">
-        <Random className='mr-5 p-2 font-hun hover:text-text-highlight transition' />
-        <button className='mr-5 p-2 font-hun hover:text-text-highlight transition' onClick={() => setViewFilters(!viewFilters)}>TAGS</button>
+        <Random mediaCount={mediaCount} className='mr-5 p-2 font-hun hover:text-text-highlight transition' />
+        <button className='mr-5 p-2 font-hun hover:text-text-highlight transition' onClick={() => setViewFilters(!viewFilters)}>FILTERS</button>
       </div>
       {viewFilters && (
         <div className="flex flex-row gap-2 w-full">
-          <div>test</div>
-          <div>test</div>
-          <div>test</div>
-          <div>test</div>
-          <div>test</div>
-          <div>test</div>
-          <div>test</div>
-          <div>test</div>
-          <div>test</div>
+          <div className='flex flex-wrap gap-3 items-center ml-5'>
+            <p>Tags: </p>
+            {tags.length > 0 && tags.map((tag, index) => {
+              return <div key={index} className='bg-foreground-second text-text px-3 p-1 rounded-4xl'>
+                {tag}
+                <button onClick={() => remove(tag)} className='bg-foreground-second px-3 rounded-4xl cursor-pointer'>-</button>
+              </div>
+            })}
+            <AddFilter params={params} tagList={tagList} />
+          </div>
         </div>
       )}
     </div>

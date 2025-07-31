@@ -7,10 +7,12 @@ import AudioPlayer from '../../components/bnuuy_page/audio';
 import ImageViewer from '../../components/bnuuy_page/image';
 import Random from '../../components/randButton';
 import ErrorBlock from '@/app/components/errorblock';
-import { getLikes } from '@/db/likes/get_likes';
 import { getMediaTags } from '@/db/tags/media_tags';
 import { hasUserLikedMedia } from '@/db/likes/get_user_liked_media';
 import { AddTag } from '@/app/components/bnuuy_page/addtag';
+import { getCount } from '@/db/media/getMediaCount';
+import Image from 'next/image';
+import Likes from '@/app/components/bnuuy_page/like';
 
 const EXPIRY_SECONDS = 60;
 
@@ -26,16 +28,17 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
     const { slug } = await params;
     const id = Number(slug);
 
-    const [data, tag_data, userLiked] = await Promise.all([
+    const [data, tag_data, userLiked, count] = await Promise.all([
         getMedia(id),
         getMediaTags(id),
-        hasUserLikedMedia(id)
+        hasUserLikedMedia(id),
+        getCount()
     ])
 
     if ('error' in data) {
         return <div className='md:ml-25 md:mr-25 mt-5 pb-10 text-text text-xl'>
             <Back />
-            <Random className="p-3 m-1 ml-5 w-30 rounded-2xl bg-background-second hover:bg-hoverbg transition" />
+            <Random className="p-3 m-1 ml-5 w-30 rounded-2xl bg-background-second hover:bg-hoverbg transition" mediaCount={0} />
             <ErrorBlock error={data.error} />
         </div>
     }
@@ -45,7 +48,8 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
     const metatags = data.meta ?? [];
     const tags = 'error' in tag_data ? [] : [...new Set(tag_data.map(t => t.tags.tag))];
     const likes = data.like_count;
-    const liked = typeof userLiked === 'boolean' ? userLiked: false;
+    const liked = typeof userLiked === 'boolean' ? userLiked : false;
+    const mediaCount = 'error' in count ? 0 : count.total;
 
 
     function MediaViewer() {
@@ -65,7 +69,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
     return (
         <div className='md:ml-25 md:mr-25 mt-5 pb-10 text-text text-xl'>
             <Back />
-            <Random className="p-3 m-1 ml-5 w-30 rounded-2xl bg-background-second hover:bg-hoverbg transition" />
+            <Random mediaCount={mediaCount} className="p-3 m-1 ml-5 w-30 rounded-2xl bg-background-second hover:bg-hoverbg transition" />
             <div className='flex w-full justify-center mt-5'>
                 <div className='max-w-[75vw] max-h-[75vh] flex justify-center'>
                     <MediaViewer key={slug} />
@@ -75,19 +79,20 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
                 <Download url={mediaURL} name={data.name} />
                 <a target='_blank' href={data.original} className='text-white hover:text-gray-400 bg-blue hover:bg-hoverblue p-3 w-4/5 md:w-1/5 text-center rounded-2xl transition'>Original Message</a>
             </div>
-            <div className='flex gap-10 justify-center flex-col md:flex-row items-center text-center'>
-                <p className='w-60 truncate md:text-right'>{data.name}</p>
-                <p className='w-60 truncate md:text-left opacity-70'>By: {data.author}</p>
+            <div className='flex gap-2 md:gap-10 justify-center flex-col md:flex-row items-center text-center'>
+                <p className='w-100 md:text-right'>{data.name}</p>
+                <p className='w-100 md:text-left opacity-70'>By: {data.author}</p>
             </div>
-            <div>Likes: {likes}</div>
-            <div>You have {liked ? 'liked': 'not liked'} this</div>
+            <div className='w-full flex justify-center items-center gap-2 md:gap-10'>
+                <Likes likes={likes} hasLiked={liked} id={id}/>
+            </div>
             {tags && (
                 <div className='mx-5 md:mx-40 mt-10 flex flex-wrap gap-3 justify-center md:flex-row items-center text-center'>
                     <p>Tags: </p>
                     {tags.map((tag, index) => {
                         return <div key={index} className='bg-foreground-second text-text p-1 px-3 rounded-4xl'>{tag}</div>
                     })}
-                    <AddTag mediaId={id}/>
+                    <AddTag mediaId={id} />
                 </div>
             )}
         </div>

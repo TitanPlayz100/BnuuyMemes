@@ -42,7 +42,7 @@ export const getPaginatedData = unstable_cache(
       : data;
 
     // paginate
-    const maxPage = Math.ceil((filtered.length - 1) / 25)
+    const maxPage = Math.ceil(filtered.length / 25)
     const clampedPage = Math.min(Math.max(Number(page), 1), maxPage);
     const offset = (clampedPage - 1) * ITEMS_PER_PAGE;
     const pagedData = filtered.slice(offset, offset + ITEMS_PER_PAGE);

@@ -3,6 +3,8 @@ import Card from './components/main/cards';
 import Search from './components/main/search';
 import { getPaginatedData } from '@/db/media/getPagenatedData';
 import ErrorBlock from './components/errorblock';
+import { listTags } from '@/db/tags/list_tags';
+import { getCount } from '@/db/media/getMediaCount';
 
 export interface RootParams {
   page?: string;
@@ -12,15 +14,21 @@ export interface RootParams {
 
 export default async function Home({ searchParams }: { searchParams: Promise<RootParams> }) {
   const params = await searchParams;
-  const page = Number(params.page) || 1;
+  const page = Number(params.page ?? 1) || 1;
   const searchTerm = params.search ?? '';
   const tags = params.tags?.split(',') ?? [];
 
-  const data = await getPaginatedData(page, searchTerm, tags);
+  const [data, count, tagList] = await Promise.all([
+    getPaginatedData(page, searchTerm, tags),
+    getCount(),
+    listTags()
+  ])
+
+  const tagData: string[] = 'error' in tagList ? [] : tagList.tags;
+  const mediaCount: number = 'error' in count ? 0 : count.total;
 
   if ('error' in data && data.error) {
     return <>
-      <Search params={params} />
       <div className='w-screen flex flex-col items-center mb-5'>
         <ErrorBlock error={data.error} />
       </div>
@@ -29,7 +37,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<Roo
 
   return (
     <>
-      <Search params={params} />
+      <Search params={params} tagList={tagData} mediaCount={mediaCount} />
       <div className='w-screen flex flex-col items-center mb-5'>
         <PageNav params={params} curPage={data.curPage} maxPage={data.maxPage} />
         <div className='flex flex-wrap md:w-4/5 border-3 border-text shadow-main justify-center bg-background-dark pt-5 pb-5 m-6'>

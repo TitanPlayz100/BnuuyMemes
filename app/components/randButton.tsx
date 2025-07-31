@@ -1,14 +1,11 @@
 "use client"
 
-import { getCount } from "@/db/media/getMediaCount";
 import { useRouter } from "next/navigation"
 
-export default function Random({ className }: { className: string }) {
+export default function Random({ className, mediaCount }: { className: string, mediaCount: number }) {
     const router = useRouter();
     const random = async () => {
-        const data = await getCount();
-        if ('error' in data && data.error) return;
-        const random = Math.floor(Math.random() * data.total);
+        const random = Math.floor(Math.random() * mediaCount);
         router.push(`/bnuuys/${random}`);
     }
 

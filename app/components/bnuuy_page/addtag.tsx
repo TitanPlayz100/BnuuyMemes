@@ -50,7 +50,7 @@ export function AddTag({ mediaId }: { mediaId: number }) {
                     <button onClick={() => add()} className='p-0 cursor-pointer'>+</button>
                 </div>
                 :
-                <button onClick={() => setAdding(true)} className='bg-foreground-second p-1 px-3 rounded-4xl cursor-pointer'>+</button>
+                <button onClick={() => setAdding(true)} className='bg-foreground-second hover:bg-hoverbg transition p-1 px-3 rounded-4xl cursor-pointer'>+</button>
             }
             {undo && (
                 <button onClick={() => undoTag()} className='bg-red-800 text-red-300 p-1 px-3 rounded-4xl cursor-pointer'>Undo</button>

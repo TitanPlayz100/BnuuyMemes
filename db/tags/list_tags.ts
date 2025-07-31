@@ -10,11 +10,11 @@ export const listTags = unstable_cache(
   async () => {
     const { data, error } = await supabase
       .from('tags')
-      .select('name')
-      .order('name', { ascending: true });
+      .select('tag')
+      .order('tag', { ascending: true });
 
     if (error) return { error }
-    return { tags: data.map(d => d.name) } as { tags: string[] };
+    return { tags: data.map(d => d.tag) } as { tags: string[] };
   },
   ['tags'],
   { tags: ['tags'] } // caching tag
