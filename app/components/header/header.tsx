@@ -18,8 +18,8 @@ export default async function Header() {
                 <Link href="https://github.com/TitanPlayz100/BnuuyMemes" title="GitHub" className="brightness-130 hover:brightness-200">
                     <Image src="/icons/github.svg" alt="github" width={30} height={30} />
                 </Link>
-                <Link href="https://discord.com/channels/673303546107658242/917245246449016853/981447677470445578" title="Discord Top Pinned" className="brightness-130 hover:brightness-200">
-                    <Image src="/icons/link.svg" alt="github" width={25} height={25} className="translate-y-1" />
+                <Link href="/info" title="Info page" className="brightness-130 hover:brightness-200">
+                    <Image src="/icons/info.svg" alt="info page" width={25} height={25} className="translate-y-1 scale-140" />
                 </Link>
                 <Link href="https://www.youtube.com/@TitanPlayz100" className="hover:brightness-200">
                     <p>BY TITANPLAYZ</p>

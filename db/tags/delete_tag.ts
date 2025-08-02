@@ -3,8 +3,8 @@ import { revalidateTags } from "./revalidate";
 
 export async function removeTagFromMedia(mediaId: number, tag: string) {
   const supabase = createClient();
-  const {data: userData} = await supabase.auth.getUser();
-  if (!userData.user) return;
+  const { error: authError } = await supabase.auth.getUser();
+  if (authError) return { error: authError };
   
   // get tag id
   const { data, error } = await supabase

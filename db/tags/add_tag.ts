@@ -3,8 +3,8 @@ import { revalidateTags } from "./revalidate";
 
 export async function addTagToMedia(mediaId: number, tag: string) {
   const supabase = createClient();
-  const { data: userData, error: userError } = await supabase.auth.getUser();
-  if (!userData.user) return { userError };
+  const { data: userData, error: authError } = await supabase.auth.getUser();
+  if (authError) return { error: authError };
 
   const { data: dataDuped } = await supabase
     .from('tags')

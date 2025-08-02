@@ -2,9 +2,9 @@ import { createClient } from "../dbClient";
 
 export async function addLike(mediaId: number) {
   const supabase = createClient();
-  const { data: userData } = await supabase.auth.getUser();
-  if (!userData.user) return;
-
+  const { data: userData, error: authError } = await supabase.auth.getUser();
+  if (authError) return { error: authError };
+  
   const { error } = await supabase
     .from('media_likes')
     .upsert([{ media_id: mediaId, user_id: userData.user.id }], { ignoreDuplicates: true });

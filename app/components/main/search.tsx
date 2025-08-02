@@ -37,7 +37,7 @@ export default function Search({ params, tagList, mediaCount }:
   }
 
   return (
-    <div className="bg-background-second text-text p-5 pl-10 m-10 mb-5 flex flex-col md:flex-row flex-wrap gap-5 text-xl transition">
+    <div className="bg-background-second text-text p-5 md:pl-10 m-10 mb-5 flex flex-col md:flex-row flex-wrap gap-5 text-xl transition">
       <div className='flex gap-5'>
         <input
           type='text'

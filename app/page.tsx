@@ -24,8 +24,8 @@ export default async function Home({ searchParams }: { searchParams: Promise<Roo
     listTags()
   ])
 
-  const tagData: string[] = 'error' in tagList ? [] : tagList.tags;
   const mediaCount: number = 'error' in count ? 0 : count.total;
+  const tagData: string[] = 'error' in tagList ? [] : tagList.tags;
 
   if ('error' in data && data.error) {
     return <>

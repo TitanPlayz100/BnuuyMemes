@@ -11,8 +11,8 @@ import { getMediaTags } from '@/db/tags/media_tags';
 import { hasUserLikedMedia } from '@/db/likes/get_user_liked_media';
 import { AddTag } from '@/app/components/bnuuy_page/addtag';
 import { getCount } from '@/db/media/getMediaCount';
-import Image from 'next/image';
 import Likes from '@/app/components/bnuuy_page/like';
+import { createClient } from '@/db/dbServer';
 
 const EXPIRY_SECONDS = 60;
 
@@ -27,12 +27,14 @@ async function fetchURL(name: string) {
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
     const { slug } = await params;
     const id = Number(slug);
+    const supabase = await createClient();
 
-    const [data, tag_data, userLiked, count] = await Promise.all([
+    const [data, tag_data, userLiked, count, userData] = await Promise.all([
         getMedia(id),
         getMediaTags(id),
         hasUserLikedMedia(id),
-        getCount()
+        getCount(),
+        supabase.auth.getUser()
     ])
 
     if ('error' in data) {
@@ -50,7 +52,6 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
     const likes = data.like_count;
     const liked = typeof userLiked === 'boolean' ? userLiked : false;
     const mediaCount = 'error' in count ? 0 : count.total;
-
 
     function MediaViewer() {
         if (metatags.includes("not_downloaded")) {
@@ -84,7 +85,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
                 <p className='w-100 md:text-left opacity-70'>By: {data.author}</p>
             </div>
             <div className='w-full flex justify-center items-center gap-2 md:gap-10'>
-                <Likes likes={likes} hasLiked={liked} id={id}/>
+                <Likes likes={likes} hasLiked={liked} id={id} signed_in={!userData.error} />
             </div>
             {tags && (
                 <div className='mx-5 md:mx-40 mt-10 flex flex-wrap gap-3 justify-center md:flex-row items-center text-center'>
@@ -92,7 +93,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
                     {tags.map((tag, index) => {
                         return <div key={index} className='bg-foreground-second text-text p-1 px-3 rounded-4xl'>{tag}</div>
                     })}
-                    <AddTag mediaId={id} />
+                    <AddTag mediaId={id} signed_in={!userData.error} />
                 </div>
             )}
         </div>

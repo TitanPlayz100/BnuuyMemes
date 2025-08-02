@@ -4,12 +4,14 @@ import { addTagToMedia } from "@/db/tags/add_tag";
 import { removeTagFromMedia } from "@/db/tags/delete_tag";
 import { useState } from "react"
 
-export function AddTag({ mediaId }: { mediaId: number }) {
+export function AddTag({ mediaId, signed_in }: { mediaId: number, signed_in: boolean }) {
     const [adding, setAdding] = useState(false);
     const [value, setValue] = useState('');
     const [undoValue, setUndoValue] = useState('');
     const [undo, showUndo] = useState(false);
     const [error, setError] = useState(false);
+
+    if (!signed_in) return <></>;
 
     const add = async () => {
         setError(false)
