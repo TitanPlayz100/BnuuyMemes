@@ -24,8 +24,15 @@ export default async function Header() {
                 <Link href="https://www.youtube.com/@TitanPlayz100" className="hover:brightness-200">
                     <p>BY TITANPLAYZ</p>
                 </Link>
-                
+
                 {data.user ? <Logout /> : <Link href="/login" className="hover:brightness-200">LOGIN</Link>}
+            </div>
+
+            <div className="md:hidden flex items-center gap-5">
+                <Link href="/info" title="Info page" className="brightness-200">
+                    <Image src="/icons/info.svg" alt="info page" width={25} height={25} className="translate-y-1 scale-140" />
+                </Link>
+                {data.user ? <Logout /> : <Link href="/login" className="text-text-highlight">LOGIN</Link>}
             </div>
         </header>
     )

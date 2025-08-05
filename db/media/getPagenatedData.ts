@@ -27,7 +27,7 @@ export const getPaginatedData = unstable_cache(
     if (tags.length > 0) {
       query = supabase.rpc('get_media_with_all_tags', { tag_names: tags })
     } else {
-      query = supabase.from('media').select('*');
+      query = supabase.from('media').select('*').order('id', {ascending: true});
     }
     
     const { data, error } = await query;

@@ -6,25 +6,17 @@ export async function addTagToMedia(mediaId: number, tag: string) {
   const { data: userData, error: authError } = await supabase.auth.getUser();
   if (authError) return { error: authError };
 
-  const { data: dataDuped } = await supabase
-    .from('tags')
-    .upsert({ tag }, { ignoreDuplicates: true, onConflict: 'tag' })
-    .select("id, tag");
-  if (dataDuped && dataDuped.length === 0) return { errorDupe: "duped" };
-
-  // get tag id
   const { data, error } = await supabase
-    .from('tags')
-    .select('id')
-    .eq('tag', tag)
-    .single();
+    .rpc('insert_tag_and_media', {
+      tag_input: tag,
+      user_id_input: userData.user.id,
+      media_id_input: mediaId
+    })
+
   if (error) return { error };
 
-  // add tag
-  const { error: error2 } = await supabase
-    .from('media_tags')
-    .upsert({ user_id: userData.user.id, media_id: mediaId, tag_id: data.id }, { ignoreDuplicates: true });
-  if (error2) return { error2 };
+  const { media_tag_duplicate } = data[0];
+  if (media_tag_duplicate) return { error: "duplicate" }
 
   revalidateTags();
 }

@@ -2,6 +2,7 @@
 
 import { createClient } from '@/db/dbClient'
 import { Provider } from '@supabase/supabase-js';
+import Image from 'next/image';
 
 export default function LoginPage() {
     const signInWithProvider = async (provider: Provider) => {
@@ -14,40 +15,49 @@ export default function LoginPage() {
         })
     }
 
+    function Icon({provider}: {provider:string}) {
+        return <Image src={`/icons/auth/${provider}-icon.svg`} alt={provider} width={20} height={20} className='inline mx-2 translate-y-[-20%]' />
+    }
+
     return (
         <div className="flex w-full h-[85vh] text-text text-2xl font-bold justify-center items-center">
-            <div className='flex flex-col items-center gap-5 m-5 p-10 md:p-25 border-3 border-text shadow-main justify-center bg-background-dark'>
-                <h1 className='text-4xl'>Login</h1>
+            <div className='flex flex-col items-center gap-5 m-5 py-25 w-full md:w-7/20 border-3 border-text shadow-main justify-center bg-background-dark'>
+                <h1 className='text-4xl'>Sign In</h1>
                 <p className='text-sm opacity-50'>Just click one of these</p>
                 <button
-                    className="bg-white text-black p-2 rounded w-6/5 hover:opacity-80 transition"
+                    className="bg-white text-black p-2 rounded w-3/5 hover:opacity-80 transition"
                     onClick={() => signInWithProvider('google')}
                 >
-                    Sign in with Google
+                    <Icon provider='google'/>
+                    Google
                 </button>
                 <button
-                    className="bg-indigo-600 text-white p-2 rounded w-6/5 hover:opacity-80 transition"
+                    className="bg-indigo-600 text-white p-2 rounded w-3/5 hover:opacity-80 transition"
                     onClick={() => signInWithProvider('discord')}
                 >
-                    Sign in with Discord
+                    <Icon provider='discord'/>
+                    Discord
                 </button>
                 <button
-                    className="bg-gray-400 text-black p-2 rounded w-6/5 hover:opacity-80 transition"
+                    className="bg-gray-400 text-black p-2 rounded w-3/5 hover:opacity-80 transition"
                     onClick={() => signInWithProvider('github')}
                 >
-                    Sign in with Github
+                    <Icon provider='github'/>
+                    Github
                 </button>
                 <button
-                    className="bg-black text-white border-2 border-white p-2 rounded w-6/5 hover:opacity-80 transition"
+                    className="bg-black text-white border-2 border-white p-2 rounded w-3/5 hover:opacity-80 transition"
                     onClick={() => signInWithProvider('twitter')}
                 >
-                    Sign in with X (formerly twitter)
+                    <Icon provider='twitter'/>
+                    X (formerly twitter)
                 </button>
                 <button
-                    className="bg-purple-700 text-white p-2 rounded w-6/5 hover:opacity-80 transition"
+                    className="bg-purple-700 text-white p-2 rounded w-3/5 hover:opacity-80 transition"
                     onClick={() => signInWithProvider('twitch')}
                 >
-                    Sign in with Twitch
+                    <Icon provider='twitch'/>
+                    Twitch
                 </button>
             </div>
         </div>

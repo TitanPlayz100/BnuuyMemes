@@ -9,7 +9,7 @@ export default function ImageViewer({ url }: { url: string }) {
         <>
             {error
                 ? <p>Error with image</p>
-                : <img src={url} alt={url} className="max-w-full max-h-full" onError={() => setError(true)} />
+                : <img src={url} alt="Image" className="max-w-full max-h-full" onError={() => setError(true)} />
             }
         </>
     )

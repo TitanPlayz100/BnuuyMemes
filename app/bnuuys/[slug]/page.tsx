@@ -68,7 +68,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
     }
 
     return (
-        <div className='md:ml-25 md:mr-25 mt-5 pb-10 text-text text-xl'>
+        <div className='md:ml-25 md:mr-25 mt-5 pb-10 text-text text-xl overflow-x-hidden'>
             <Back />
             <Random mediaCount={mediaCount} className="p-3 m-1 ml-5 w-30 rounded-2xl bg-background-second hover:bg-hoverbg transition" />
             <div className='flex w-full justify-center mt-5'>

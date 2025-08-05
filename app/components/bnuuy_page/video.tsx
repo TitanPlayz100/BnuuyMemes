@@ -15,7 +15,7 @@ export default function VideoPlayer({ url }: { url: string }) {
             {error
                 ? <p >Error with video</p>
                 : srcurl && (
-                    <video controls autoPlay onError={() => setError(true)}>
+                    <video controls autoPlay playsInline onError={() => setError(true)}>
                         <source src={srcurl} type="video/mp4" />
                     </video>
                 )}

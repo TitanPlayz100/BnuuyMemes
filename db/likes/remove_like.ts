@@ -12,7 +12,6 @@ export async function removeLike(mediaId: number) {
     .eq('user_id', userData.user.id);
   if (error) return { error }
 
-  const { error: error2 } = await supabase
-    .rpc('decrement_like_count', { media_id: mediaId });
-  if (error2) return { error: error2 }
+  await supabase
+    .rpc('update_media_likes', { p_media_id: mediaId });
 }

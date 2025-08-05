@@ -11,6 +11,6 @@ export default function Logout() {
         router.refresh();
     }
 
-    return <button onClick={logout} className="hover:brightness-200 cursor-pointer">LOGOUT</button>
+    return <button onClick={logout} className="md:text-text text-text-highlight hover:brightness-200 cursor-pointer">LOGOUT</button>
 
 }
