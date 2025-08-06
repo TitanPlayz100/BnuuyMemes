@@ -20,25 +20,27 @@ const supabase = createClient(
 );
 
 export const getPaginatedData = unstable_cache(
-  async (page: number, searchString: string, tags: string[]) => {
+  async (page: number, searchString: string, tags: string[], sort: string, type: string) => {
     let query
 
     // tag filtering using rpc
     if (tags.length > 0) {
-      query = supabase.rpc('get_media_with_all_tags', { tag_names: tags })
+      query = supabase
+        .rpc('get_media_with_all_tags', { tag_names: tags })
     } else {
-      query = supabase.from('media').select('*').order('id', {ascending: true});
+      query = supabase.from('media').select('*')
     }
-    
+
+    // sort and type filter
+    query.order(sort, { ascending: true })
+    if (type != 'all') query.eq('type', type);
+
     const { data, error } = await query;
     if (error) return { error };
 
     // Fuzzy search
     const filtered: Data[] = searchString
-      ? search(searchString, data, {
-        keySelector: (msg: any) => [msg.name, msg.author],
-        threshold: 0.6,
-      })
+      ? search(searchString, data, { keySelector: (msg: any) => [msg.name, msg.author], threshold: 0.6 })
       : data;
 
     // paginate

@@ -7,9 +7,9 @@ import { RootParams } from "@/app/page";
 type params2 = { params: RootParams, curPage: number, maxPage: number }
 export default function PageNav({ params, curPage, maxPage }: params2) {
   const newUrl = (newPage: number) => {
-    const pageParams = new URLSearchParams({page: newPage.toString()});
-    if (params.search) pageParams.set('search', params.search);
-
+    const pageParams = populateParamsServer(params);
+    pageParams.delete("page")
+    if (newPage != 1) pageParams.set("page", newPage.toString())
     return `/?${pageParams.toString()}`;
   }
 
@@ -36,4 +36,14 @@ export default function PageNav({ params, curPage, maxPage }: params2) {
       {/* style={{ visibility: curPage < maxPage ? 'visible' : 'hidden' }} */}
     </nav>
   );
+}
+
+function populateParamsServer(params: RootParams) {
+  const pageParams = new URLSearchParams();
+  if (params.tags) pageParams.set('tags', params.tags);
+  if (params.page) pageParams.set('page', params.page);
+  if (params.search) pageParams.set('search', params.search);
+  if (params.sort) pageParams.set('sort', params.sort);
+  if (params.type) pageParams.set('type', params.type);
+  return pageParams;
 }

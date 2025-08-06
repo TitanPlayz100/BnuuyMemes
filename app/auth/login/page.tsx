@@ -21,7 +21,7 @@ export default function LoginPage() {
 
     return (
         <div className="flex w-full h-[85vh] text-text text-2xl font-bold justify-center items-center">
-            <div className='flex flex-col items-center gap-5 m-5 py-25 w-full md:w-7/20 border-3 border-text shadow-main justify-center bg-background-dark'>
+            <div className='flex flex-col items-center gap-5 m-5 py-15 w-full md:w-7/20 border-3 border-text shadow-main justify-center bg-background-dark'>
                 <h1 className='text-4xl'>Sign In</h1>
                 <p className='text-sm opacity-50'>Just click one of these</p>
                 <button
@@ -59,6 +59,9 @@ export default function LoginPage() {
                     <Icon provider='twitch'/>
                     Twitch
                 </button>
+                <p className='text-sm opacity-70 text-center'>Signing in lets you add tags and like.
+                    <br/>
+                    Please do not abuse this, respect others using this site.</p>
             </div>
         </div>
     )

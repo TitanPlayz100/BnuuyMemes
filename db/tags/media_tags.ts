@@ -10,12 +10,12 @@ export const getMediaTags = unstable_cache(
   async (mediaId: number) => {
     const { data, error } = await supabase
       .from('media_tags')
-      .select('tags(tag)')
+      .select('tags(tag),user_id')
       .eq('media_id', mediaId)
 
     if (error) return { error };
     const data_any: any = data;
-    return data_any as { tags: { tag: string } }[];
+    return data_any as { tags: { tag: string }, user_id: string }[];
   },
   ['tags'],
   { tags: ['tags'] } // caching tag

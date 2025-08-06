@@ -3,8 +3,9 @@
 import { RootParams } from "@/app/page";
 import { useRouter } from "next/navigation";
 import { useState } from "react"
+import { populateParams } from "./search";
 
-export function AddFilter({ params, tagList }: { params: RootParams, tagList: string[] }) {
+export default function AddTagFilter({ params, tagList }: { params: RootParams, tagList: string[] }) {
   const [adding, setAdding] = useState(false);
   const [value, setValue] = useState('');
   const router = useRouter();
@@ -12,9 +13,9 @@ export function AddFilter({ params, tagList }: { params: RootParams, tagList: st
   const add = async () => {
     const newTags = params.tags?.split(',') ?? [];
     newTags.push(value)
-    const pageParams = new URLSearchParams({ tags: newTags.join(',') });
-    if (params.page) pageParams.set('page', params.page);
-    if (params.search) pageParams.set('search', params.search);
+
+    const pageParams = populateParams(params);
+    pageParams.set('tags', newTags.join(','));
 
     setValue('');
     setAdding(false);

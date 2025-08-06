@@ -7,19 +7,28 @@ import { listTags } from '@/db/tags/list_tags';
 import { getCount } from '@/db/media/getMediaCount';
 
 export interface RootParams {
-  page?: string;
-  search?: string;
-  tags?: string;
+  page?: string,
+  search?: string,
+  tags?: string,
+  sort?: string,
+  type?: string
 };
+
+export const sortList = ['id', 'like_count', 'name', 'author']
+export const typeList = ['all', 'video', 'audio', 'image', 'text', 'other']
 
 export default async function Home({ searchParams }: { searchParams: Promise<RootParams> }) {
   const params = await searchParams;
   const page = Number(params.page ?? 1) || 1;
   const searchTerm = params.search ?? '';
   const tags = params.tags?.split(',') ?? [];
+  let sort = params.sort ?? 'id';
+  if (!sortList.includes(sort)) sort = 'id';
+  let type = params.type ?? 'all';
+  if (!typeList.includes(type)) type = 'all';
 
   const [data, count, tagList] = await Promise.all([
-    getPaginatedData(page, searchTerm, tags),
+    getPaginatedData(page, searchTerm, tags, sort, type),
     getCount(),
     listTags()
   ])

@@ -30,3 +30,9 @@
     color: var(--text);
     background-color: var(--background-hover);
 }
+
+.pageitem:active {
+    transition: 0.2s all ease-in-out;
+    background-color: #36503a;
+    color: #e5f4e0;
+}

@@ -31,7 +31,10 @@ As well as the FAQ (created by ZaptorZap) - [tetrio.github.io/faq](https://tetri
 ## Guidelines
 Please respect everyone who uses this website, and do not create or spam unecessary tags, or ruin the experience of others, as well as being respectful in the bnuuy thread.
 
-If you want to report something just send it on the bnuuy thread or feel free to dm me (titanplayz) on discord.
+### Contact / Report
+If you want to report or suggest anything just send it on the bnuuy thread or feel free to dm me (titanplayz) on discord.
+
+Report issues regarding the website by creating a new [github issue here](https://github.com/TitanPlayz100/BnuuyMemes/issues)
 
 ## Contributing
 Feel free to make any suggestions or merge requests, I'll most likely accept them. 

@@ -16,7 +16,7 @@ export function AddTag({ mediaId, signed_in }: { mediaId: number, signed_in: boo
     const add = async () => {
         setError(false)
         const data = await addTagToMedia(mediaId, value);
-        if (data && (data.errorDupe || data.error || data.error2)) {
+        if (data?.error) {
             setError(true);
             return;
         }
@@ -28,7 +28,7 @@ export function AddTag({ mediaId, signed_in }: { mediaId: number, signed_in: boo
 
     const undoTag = async () => {
         const data = await removeTagFromMedia(mediaId, undoValue);
-        if (data && (data.error || data.error2)) {console.log(data.error, data.error2); return}; // todo handle error better
+        if (data?.error) return; // todo handle error better
         showUndo(false);
         setUndoValue('');
     }
@@ -60,7 +60,6 @@ export function AddTag({ mediaId, signed_in }: { mediaId: number, signed_in: boo
             {error && (
                 <div className='bg-red-800 text-red-300 p-1 px-3 rounded-4xl cursor-pointer'>Error</div>
             )}
-
         </>
     )
 }

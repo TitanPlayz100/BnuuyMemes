@@ -9,14 +9,14 @@ import Random from '../../components/randButton';
 import ErrorBlock from '@/app/components/errorblock';
 import { getMediaTags } from '@/db/tags/media_tags';
 import { hasUserLikedMedia } from '@/db/likes/get_user_liked_media';
-import { AddTag } from '@/app/components/bnuuy_page/addtag';
 import { getCount } from '@/db/media/getMediaCount';
 import Likes from '@/app/components/bnuuy_page/like';
 import { createClient } from '@/db/dbServer';
+import TagList from '@/app/components/bnuuy_page/tags';
 
 const EXPIRY_SECONDS = 60;
 
-async function fetchURL(name: string) {
+function fetchURL(name: string) {
     const { SECRET_KEY, BASE_URL }: any = process.env;
     const expires = Math.floor(Date.now() / 1000) + EXPIRY_SECONDS
     const data = `${name}:${expires}`;
@@ -45,13 +45,15 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
         </div>
     }
 
-    const mediaURL = await fetchURL(data.name);
+    const mediaURL = fetchURL(data.name);
     const type = data.type
     const metatags = data.meta ?? [];
-    const tags = 'error' in tag_data ? [] : [...new Set(tag_data.map(t => t.tags.tag))];
+    const tags = 'error' in tag_data ? [] : tag_data.map(t => { return { tag: t.tags.tag, id: t.user_id } });
     const likes = data.like_count;
     const liked = typeof userLiked === 'boolean' ? userLiked : false;
     const mediaCount = 'error' in count ? 0 : count.total;
+
+    console.log(tags);
 
     function MediaViewer() {
         if (metatags.includes("not_downloaded")) {
@@ -87,15 +89,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
             <div className='w-full flex justify-center items-center gap-2 md:gap-10'>
                 <Likes likes={likes} hasLiked={liked} id={id} signed_in={!userData.error} />
             </div>
-            {tags && (
-                <div className='mx-5 md:mx-40 mt-10 flex flex-wrap gap-3 justify-center md:flex-row items-center text-center'>
-                    <p>Tags: </p>
-                    {tags.map((tag, index) => {
-                        return <div key={index} className='bg-foreground-second text-text p-1 px-3 rounded-4xl'>{tag}</div>
-                    })}
-                    <AddTag mediaId={id} signed_in={!userData.error} />
-                </div>
-            )}
+            {tags && <TagList tags={tags} id={id} userid={userData.data?.user?.id} />}
         </div>
     )
 }
