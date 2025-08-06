@@ -5,6 +5,8 @@ import { getPaginatedData } from '@/db/media/getPagenatedData';
 import ErrorBlock from './components/errorblock';
 import { listTags } from '@/db/tags/list_tags';
 import { getCount } from '@/db/media/getMediaCount';
+import { sortList } from './components/main/sort';
+import { typeList } from './components/main/typeFilter';
 
 export interface RootParams {
   page?: string,
@@ -13,9 +15,6 @@ export interface RootParams {
   sort?: string,
   type?: string
 };
-
-export const sortList = ['id', 'like_count', 'name', 'author']
-export const typeList = ['all', 'video', 'audio', 'image', 'text', 'other']
 
 export default async function Home({ searchParams }: { searchParams: Promise<RootParams> }) {
   const params = await searchParams;

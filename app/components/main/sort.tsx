@@ -1,9 +1,11 @@
 'use client'
 
-import { RootParams, sortList } from "@/app/page"
+import { RootParams } from "@/app/page"
 import { useRouter } from "next/navigation";
 import { ChangeEvent, useState } from "react";
 import { populateParams } from "./search";
+
+export const sortList = ['id', 'like_count', 'name', 'author']
 
 export default function Sort({ params }: { params: RootParams }) {
     const [value, setValue] = useState(params.sort ?? 'id');

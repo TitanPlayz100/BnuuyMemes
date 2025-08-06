@@ -1,9 +1,11 @@
 'use client'
 
-import { RootParams, typeList } from "@/app/page"
+import { RootParams } from "@/app/page"
 import { useRouter } from "next/navigation";
 import { ChangeEvent, useState } from "react";
 import { populateParams } from "./search";
+
+export const typeList = ['all', 'video', 'audio', 'image', 'text', 'other']
 
 export default function TypeFilter({ params }: { params: RootParams }) {
     const [value, setValue] = useState(params.type ?? 'all');
