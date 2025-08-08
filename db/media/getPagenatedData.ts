@@ -1,6 +1,7 @@
 import { search } from 'fast-fuzzy';
 import { unstable_cache } from 'next/cache';
 import { createClient } from "@supabase/supabase-js";
+import { RootParams } from '@/app/page';
 
 export interface Data {
   id: number,
@@ -14,13 +15,26 @@ export interface Data {
 
 const ITEMS_PER_PAGE = 25;
 
+const sortList = ['id', 'like_count', 'name', 'author'];
+const sortAsc = ['name', 'author'];
+const typeList = ['all', 'video', 'audio', 'image', 'text', 'other'];
+
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 );
 
 export const getPaginatedData = unstable_cache(
-  async (page: number, searchString: string, tags: string[], sort: string, type: string) => {
+  async (params: RootParams) => {
+    // init filters
+    const page = Number(params.page ?? 1) || 1;
+    const searchString = params.search ?? '';
+    const tags = params.tags?.split(',') ?? [];
+    let sort = params.sort ?? 'id';
+    if (!sortList.includes(sort)) sort = 'id';
+    let type = params.type ?? 'all';
+    if (!typeList.includes(type)) type = 'all';
+
     let query
 
     // tag filtering using rpc
@@ -32,7 +46,7 @@ export const getPaginatedData = unstable_cache(
     }
 
     // sort and type filter
-    query.order(sort, { ascending: true })
+    query.order(sort, { ascending: sortAsc.includes(sort) })
     if (type != 'all') query.eq('type', type);
 
     const { data, error } = await query;

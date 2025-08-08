@@ -14,21 +14,11 @@ export interface RootParams {
   type?: string
 };
 
-const sortList = ['id', 'like_count', 'name', 'author'];
-const typeList = ['all', 'video', 'audio', 'image', 'text', 'other'];
-
 export default async function Home({ searchParams }: { searchParams: Promise<RootParams> }) {
   const params = await searchParams;
-  const page = Number(params.page ?? 1) || 1;
-  const searchTerm = params.search ?? '';
-  const tags = params.tags?.split(',') ?? [];
-  let sort = params.sort ?? 'id';
-  if (!sortList.includes(sort)) sort = 'id';
-  let type = params.type ?? 'all';
-  if (!typeList.includes(type)) type = 'all';
-
+  
   const [data, count, tagList] = await Promise.all([
-    getPaginatedData(page, searchTerm, tags, sort, type),
+    getPaginatedData(params),
     getCount(),
     listTags()
   ])

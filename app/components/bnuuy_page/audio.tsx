@@ -10,15 +10,15 @@ export default function AudioPlayer({ url }: { url: string }) {
         setSrc(url)
     }, [])
 
+    if (error) return <p>Error with video</p>;
+
     return (
         <>
-            {error
-                ? <p >Error with video</p>
-                : srcurl && (
-                    <audio controls autoPlay onError={() => setError(true)}>
-                        <source src={srcurl} />
-                    </audio>
-                )}
+            {srcurl && (
+                <audio controls autoPlay onError={() => setError(true)}>
+                    <source src={srcurl} />
+                </audio>
+            )}
         </>
     )
 }

@@ -12,7 +12,7 @@ export function populateParams(params: RootParams) {
   const pageParams = new URLSearchParams();
   if (params.tags) pageParams.set('tags', params.tags);
   if (params.page) pageParams.set('page', params.page);
-  if (params.search) pageParams.set('search', params.search);
+  if (params.search && params.search != '') pageParams.set('search', params.search);
   if (params.sort) pageParams.set('sort', params.sort);
   if (params.type) pageParams.set('type', params.type);
   return pageParams;
@@ -38,7 +38,7 @@ export default function Search({ params, tagList, mediaCount }:
     })
   }
 
-  const remove = async (name: string) => {
+  const removeTag = async (name: string) => {
     const oldTags = params.tags?.split(',') ?? [];
     const newTags = oldTags.filter(t => t != name).join(',')
 
@@ -85,7 +85,7 @@ export default function Search({ params, tagList, mediaCount }:
             {tags.length > 0 && tags.map((tag, index) => {
               return <div key={index} className='bg-foreground-second text-text px-3 p-1 rounded-4xl'>
                 {tag}
-                <button onClick={() => remove(tag)} className='bg-foreground-second px-3 rounded-4xl cursor-pointer'>-</button>
+                <button onClick={() => removeTag(tag)} className='bg-foreground-second px-3 rounded-4xl cursor-pointer'>-</button>
               </div>
             })}
             <AddTagFilter params={params} tagList={tagList} />

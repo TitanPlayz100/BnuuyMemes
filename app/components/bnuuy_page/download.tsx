@@ -27,7 +27,7 @@ export default function Download({ url, name }: { url: string, name: string }) {
                 }
             }
 
-            const blob = new Blob(chunks);
+            const blob = new Blob(chunks as BlobPart[]);
             const blobUrl = URL.createObjectURL(blob);
 
             const a = document.createElement('a');

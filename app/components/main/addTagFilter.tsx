@@ -4,6 +4,7 @@ import { RootParams } from "@/app/page";
 import { useRouter } from "next/navigation";
 import { useState } from "react"
 import { populateParams } from "./search";
+import { revalidateEverything } from "@/db/warmCache";
 
 export default function AddTagFilter({ params, tagList }: { params: RootParams, tagList: string[] }) {
   const [adding, setAdding] = useState(false);
@@ -19,6 +20,7 @@ export default function AddTagFilter({ params, tagList }: { params: RootParams, 
 
     setValue('');
     setAdding(false);
+    revalidateEverything();
     router.replace(`/?${pageParams.toString()}`, { scroll: false });
   }
 

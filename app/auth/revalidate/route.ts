@@ -1,7 +1,6 @@
-import { revalidateTag } from "next/cache";
+import { revalidateEverything } from "@/db/warmCache";
 
 export async function GET() {
-    revalidateTag('media');
-    revalidateTag('tags');
+    revalidateEverything();
     return new Response("ok");
 }

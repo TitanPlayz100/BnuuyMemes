@@ -4,6 +4,7 @@ import { RootParams } from "@/app/page"
 import { useRouter } from "next/navigation";
 import { ChangeEvent, useState } from "react";
 import { populateParams } from "./search";
+import { revalidateEverything } from "@/db/warmCache";
 
 const sortList = ['id', 'like_count', 'name', 'author'];
 
@@ -15,6 +16,7 @@ export default function Sort({ params }: { params: RootParams }) {
         setValue(e.target.value)
         const pageParams = populateParams(params);
         pageParams.set('sort', e.target.value);
+        if (e.target.value == 'like_count') revalidateEverything();
         router.replace(`/?${pageParams.toString()}`, { scroll: false });
     }
 
