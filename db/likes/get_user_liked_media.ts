@@ -2,7 +2,7 @@ import { createClient } from "../dbServer";
 
 export async function hasUserLikedMedia(mediaId: number) {
   const supabase = await createClient();
-  const {data: userData} = await supabase.auth.getUser();
+  const { data: userData } = await supabase.auth.getUser();
   if (!userData.user) return;
 
   const { data, error } = await supabase

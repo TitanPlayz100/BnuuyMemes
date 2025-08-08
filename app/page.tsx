@@ -16,7 +16,7 @@ export interface RootParams {
 
 export default async function Home({ searchParams }: { searchParams: Promise<RootParams> }) {
   const params = await searchParams;
-  
+
   const [data, count, tagList] = await Promise.all([
     getPaginatedData(params),
     getCount(),

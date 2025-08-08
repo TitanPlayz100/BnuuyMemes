@@ -3,22 +3,22 @@
 import { useEffect, useState } from "react"
 
 export default function AudioPlayer({ url }: { url: string }) {
-    const [error, setError] = useState(false);
-    const [srcurl, setSrc] = useState("");
+  const [error, setError] = useState(false);
+  const [srcurl, setSrc] = useState("");
 
-    useEffect(() => {
-        setSrc(url)
-    }, [])
+  useEffect(() => {
+    setSrc(url)
+  }, [])
 
-    if (error) return <p>Error with video</p>;
+  if (error) return <p>Error with video</p>;
 
-    return (
-        <>
-            {srcurl && (
-                <audio controls autoPlay onError={() => setError(true)}>
-                    <source src={srcurl} />
-                </audio>
-            )}
-        </>
-    )
+  return (
+    <>
+      {srcurl && (
+        <audio controls autoPlay onError={() => setError(true)}>
+          <source src={srcurl} />
+        </audio>
+      )}
+    </>
+  )
 }

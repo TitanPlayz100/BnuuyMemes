@@ -28,9 +28,9 @@ export default function RootLayout({
 
 function Footer() {
   return (
-  <div className="text-text ml-10 m-2 opacity-50 mt-auto flex">
-    <p>© BnuuySite 2025</p>
-    <Link className="ml-auto hover:text-white" href="/info">Info | Contact</Link>
-  </div>
-)
+    <div className="text-text ml-10 m-2 opacity-50 mt-auto flex">
+      <p>© BnuuySite 2025</p>
+      <Link className="ml-auto hover:text-white" href="/info">Info | Contact</Link>
+    </div>
+  )
 }

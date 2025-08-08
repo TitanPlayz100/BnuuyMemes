@@ -66,7 +66,7 @@ export default function Search({ params, tagList, mediaCount }:
         <Random mediaCount={mediaCount} className='mr-5 p-2 font-hun hover:text-text-highlight transition' />
         <button className='mr-5 p-2 font-hun hover:text-text-highlight transition' onClick={() => setViewFilters(!viewFilters)}>FILTERS</button>
       </div>
-      
+
       {viewFilters && <>
         <div className="flex flex-row gap-2 w-full flex-wrap">
           {/* sort */}

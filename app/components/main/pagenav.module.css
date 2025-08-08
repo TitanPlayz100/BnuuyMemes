@@ -1,38 +1,38 @@
 /* PAGE NAV DESIGN BY fily.gif https://fily-is.dev */
 
 .pageitem {
-    color: var(--background-dark);
-    background-color: #b0d5ab;
-    padding: 0.1em 1.5em;
-    padding-top: 0.2em;
-    margin-top: 0.4em;
-    margin-left: -0.85em;
-    clip-path: polygon(1.25em 0, 100% 0, calc(100% - 1.25em) 100%, 0 100%);
-    transition: 0.3s all ease-in-out;
-    font-family: hun;
-    font-size: large;
+  color: var(--background-dark);
+  background-color: #b0d5ab;
+  padding: 0.1em 1.5em;
+  padding-top: 0.2em;
+  margin-top: 0.4em;
+  margin-left: -0.85em;
+  clip-path: polygon(1.25em 0, 100% 0, calc(100% - 1.25em) 100%, 0 100%);
+  transition: 0.3s all ease-in-out;
+  font-family: hun;
+  font-size: large;
 }
 
 .pageitem:first-child {
-    clip-path: polygon(1.25em 0, 100% 0, calc(100% - 1.25em) 100%, 1.25em 100%, 0.625em 50%);
+  clip-path: polygon(1.25em 0, 100% 0, calc(100% - 1.25em) 100%, 1.25em 100%, 0.625em 50%);
 }
 
 .pageitem:last-child {
-    clip-path: polygon(1.25em 0, 90% 0, calc(90% + 0.625em) 50%, calc(90% - 0em) 100%, 0 100%)
+  clip-path: polygon(1.25em 0, 90% 0, calc(90% + 0.625em) 50%, calc(90% - 0em) 100%, 0 100%)
 }
 
 .pageitem:hover {
-    background-color: #FFF;
-    transition: 0.01s all ease-in-out;
+  background-color: #FFF;
+  transition: 0.01s all ease-in-out;
 }
 
 .pageitem.current {
-    color: var(--text);
-    background-color: var(--background-hover);
+  color: var(--text);
+  background-color: var(--background-hover);
 }
 
 .pageitem:active {
-    transition: 0.2s all ease-in-out;
-    background-color: #36503a;
-    color: #e5f4e0;
+  transition: 0.2s all ease-in-out;
+  background-color: #36503a;
+  color: #e5f4e0;
 }
