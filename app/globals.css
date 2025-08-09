@@ -33,6 +33,7 @@
   --foreground: #659248;
   --foreground-second: #2f471f;
   --text: #A3D391;
+  --text-second: #80a672;
   --text-highlighted: #E2FCDE;
 }
 
@@ -48,6 +49,7 @@
   --color-foreground: var(--foreground);
   --color-foreground-second: var(--foreground-second);
   --color-text: var(--text);
+  --color-text-second: var(--text-second);
   --color-text-highlight: var(--text-highlighted);
   /* todo add tag colours */
 }

@@ -2,7 +2,10 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   images: {
-    remotePatterns: [new URL('https://red-snowflake-00b4.cloudflarehost1.workers.dev/*')]
+    remotePatterns: [
+      new URL('https://r2-videos.cloudflarebnuuy.workers.dev/*'),
+      new URL('https://r2-thumbnails.cloudflarebnuuy.workers.dev/*')
+    ]
   }
 };
 

@@ -20,6 +20,8 @@ async function searchAndParse() {
         const results = await searchRequest(i);
         messages.push(...results);
     }
+    
+    messages.reverse();
 
     messages.forEach(message => {
         const content = message.content
