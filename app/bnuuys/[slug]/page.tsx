@@ -17,11 +17,11 @@ import TagList from '@/app/components/bnuuy_page/tags';
 const EXPIRY_SECONDS = 60;
 
 function fetchURL(name: string) {
-  const { SECRET_KEY, BASE_URL }: any = process.env;
+  const { SECRET_KEY, BASE_VIDEO_URL }: any = process.env;
   const expires = Math.floor(Date.now() / 1000) + EXPIRY_SECONDS
   const data = `${name}:${expires}`;
   const sig = crypto.createHmac('sha256', SECRET_KEY).update(data).digest('hex');
-  return `${BASE_URL}/${name}?expires=${expires}&sig=${sig}`
+  return `${BASE_VIDEO_URL}/${name}?expires=${expires}&sig=${sig}`
 }
 
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {

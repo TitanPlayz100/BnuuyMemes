@@ -27,11 +27,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<Roo
   const tagData: string[] = 'error' in tagList ? [] : tagList.tags;
 
   if ('error' in data && data.error) {
-    return <>
-      <div className='w-screen flex flex-col items-center mb-5'>
-        <ErrorBlock error={data.error} />
-      </div>
-    </>
+    return <div className='w-screen flex flex-col items-center mb-5'><ErrorBlock error={data.error} /></div>
   }
 
   return (

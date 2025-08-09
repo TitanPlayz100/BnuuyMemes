@@ -2,6 +2,8 @@ import { Data } from "@/db/media/getPagenatedData";
 import Image from "next/image";
 import Link from "next/link";
 
+const baseURL = process.env.BASE_THUMBNAIL_URL
+
 export default function Card({ msg }: { msg: Data }) {
   const name = msg.name.split(".")[0];
   const author = msg.author;
@@ -13,7 +15,7 @@ export default function Card({ msg }: { msg: Data }) {
   } else if (msg.type == "audio") {
     thumbnailLink = "/icons/song.svg"
   } else {
-    thumbnailLink = `/thumbnails/${name}.png`
+    thumbnailLink = `${baseURL}/${encodeURIComponent(name)}.png`
   }
 
   return (

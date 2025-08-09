@@ -3,8 +3,8 @@ import { readFileSync, createReadStream, writeFileSync } from "fs";
 import dotenv from "dotenv"
 dotenv.config({ path: "../.env" });
 
-const { BUCKET_NAME, UPLOAD_URL, ACCESS_KEY, SECRET_ACCESS_KEY } = process.env
-
+const { UPLOAD_URL, ACCESS_KEY, SECRET_ACCESS_KEY } = process.env
+const BUCKET_NAME = 'bnuuys'
 const S3 = new S3Client({
   region: "auto",
   endpoint: UPLOAD_URL,
