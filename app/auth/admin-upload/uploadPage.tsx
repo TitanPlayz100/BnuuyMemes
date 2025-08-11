@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { getUploadURL, getVideos, insertData, Message } from "./actions";
 
+const AMOUNT = 10;
+
 export default function AdminUpload() {
   const [pins, setPins] = useState<Message[]>([]);
   const [uploadProgress, setUploadProgress] = useState<Record<string, number>>({});
@@ -14,7 +16,7 @@ export default function AdminUpload() {
   };
 
   const handleUpload = async () => {
-    pins.filter(m => uploadProgress[m.name] == undefined).slice(0, 10).forEach(async msg => {
+    pins.filter(m => uploadProgress[m.name] == undefined).slice(0, AMOUNT).forEach(async msg => {
       try {
         uploadVideo(msg)
       } catch (error) {
@@ -92,12 +94,12 @@ export default function AdminUpload() {
       </button>
 
       <button onClick={handleUpload} className=" px-4 py-2 bg-green-500 text-white rounded absolute right-40">
-        Upload First 2
+        Upload First {AMOUNT}
       </button>
 
       <div className="text-text flex flex-wrap gap-2 my-5">
         {pins.map((msg, i) => (
-          <div key={i} className={"border-2 p-2 rounded-md w-60 flex flex-col " + ((i < 10) ? "border-green-500 " : "") + (((uploadProgress[msg.name] || 0) == 100) ? "bg-[#00ff0020]" : "")}>
+          <div key={i} className={"border-2 p-2 rounded-md w-60 flex flex-col " + ((i < AMOUNT) ? "border-green-500 " : "") + (((uploadProgress[msg.name] || 0) == 100) ? "bg-[#00ff0020]" : "")}>
             <p className="truncate">{msg.name}</p>
             <p className="italic text-text-second truncate">{msg.author}</p>
             <progress
