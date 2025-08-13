@@ -1,0 +1,73 @@
+#zenith_wrapper {
+  position: absolute;
+  z-index: -1;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  margin: calc(var(--spacing) * -2);
+  pointer-events:none;
+}
+
+#zenith_deck_block {
+  position: relative;
+  width: 100vw;
+  aspect-ratio: 6/1;
+  box-sizing: border-box;
+  transition: .3s background-color;
+  clip-path: rect(7vh 100vw 15vh 0vw);
+  translate: 0vw -7vh;
+  background-color: #2a070e;
+  animation: .2s .5s ZenithDeckBlockImpact ease-out, .2s .5s ZenithDeckBlockGlow forwards;
+}
+
+#zenith_card_shatter {
+  transition: .3s opacity;
+}
+
+#zenith_card_shatter_glass_a,
+#zenith_card_shatter_glass_b,
+#zenith_card_shatter_glass_c {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  animation: 1s .5s ZenithCardShatterGlass ease-out backwards;
+}
+
+#zenith_card_shatter_throb_a,
+#zenith_card_shatter_throb_b,
+#zenith_card_shatter_throb_c {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+#zenith_card_shatter_throb_a {
+  opacity: var(--throb-a)
+}
+
+#zenith_card_shatter_throb_b {
+  opacity: var(--throb-b)
+}
+
+#zenith_card_shatter_throb_c {
+  opacity: var(--throb-c)
+}
+
+@keyframes ZenithCardShatterGlass {
+  0% {
+    opacity: 0
+  }
+
+  10% {
+    opacity: 1
+  }
+
+  100% {
+    opacity: .6
+  }
+}
+

@@ -59,7 +59,7 @@ export default function Search({ params, tagList, mediaCount }:
           onKeyDown={e => { if (e.key == 'Enter') { search() } }}
           className='border border-foreground p-2 rounded-4xl min-w-1/3 outline-none pl-5'
         />
-        <img src='/icons/search.svg' onClick={search} className='w-9 scale-150 translate-y-2 cursor-pointer' />
+        <img src='/icons/search.svg' onClick={search} className='w-9 scale-150 translate-y-2 cursor-pointer hue-rotate-[var(--hue-shift)]' />
         {loading && <div className="p-2 text-foreground animate-pulse">Searching...</div>}
       </div>
       <div className="ml-auto">

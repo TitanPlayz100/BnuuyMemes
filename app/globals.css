@@ -35,6 +35,22 @@
   --text: #A3D391;
   --text-second: #80a672;
   --text-highlighted: #E2FCDE;
+  --hue-shift: 0deg
+}
+
+.rev-theme {
+  --background: rgb(22, 13, 13);
+  --background-dark: rgb(15, 9, 9);
+  --background-secondary: #211413;
+  --background-blue: #5865f2;
+  --background-hover: #563333;
+  --background-hover-blue: #2e357f;
+  --foreground: #924848;
+  --foreground-second: #471f1f;
+  --text: #d39191;
+  --text-second: #a67272;
+  --text-highlighted: #fcdede;
+  --hue-shift: 230deg
 }
 
 @theme inline {
@@ -51,11 +67,11 @@
   --color-text: var(--text);
   --color-text-second: var(--text-second);
   --color-text-highlight: var(--text-highlighted);
-  /* todo add tag colours */
 }
 
 body {
   font-family: var(--font-tfont);
+  transition: 0.3s color
 }
 
 .shadow-main {

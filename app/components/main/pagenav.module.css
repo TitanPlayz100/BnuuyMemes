@@ -2,7 +2,7 @@
 
 .pageitem {
   color: var(--background-dark);
-  background-color: #b0d5ab;
+  background-color: var(--color-text);
   padding: 0.1em 1.5em;
   padding-top: 0.2em;
   margin-top: 0.4em;
@@ -33,6 +33,6 @@
 
 .pageitem:active {
   transition: 0.2s all ease-in-out;
-  background-color: #36503a;
+  background-color: var(--color-foreground-second);
   color: #e5f4e0;
 }
