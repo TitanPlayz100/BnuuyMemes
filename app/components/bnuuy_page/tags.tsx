@@ -1,7 +1,7 @@
 'use client'
 
 import { removeTagFromMedia } from "@/db/tags/delete_tag";
-import { AddTag } from "./addtag"
+import AddTag from "./addtag"
 
 type tagsType = { tag: string, id: string }
 

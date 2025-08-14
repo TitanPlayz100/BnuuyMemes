@@ -5,7 +5,7 @@ import "./coolbg.css"
 
 export default function CoolBg() {
   useEffect(() => {
-    const root = [...(document.getElementById("zenith_card_shatter")?.children ?? [])];
+    const root = [...(document.getElementById("coolbg_card_shatter")?.children ?? [])];
 
     function pulse(time: number) {
       if (time < 0.5) return 0;
@@ -13,11 +13,6 @@ export default function CoolBg() {
       if (time < 1.5) return (1.5 - time) / 0.8;
       return 0;
     }
-
-    // function getCardOffset(anim: number, fade: number) {
-    //   // simplified function mimicing original pieces
-    //   return fade * 0.6 * Math.sin(Math.PI * anim) * Math.sin(2 * Math.PI * anim) + 0.1;
-    // }
 
     function calcOffset(offset: number, fade: number) {
       if (offset >= 1) offset -= 1;
@@ -31,13 +26,11 @@ export default function CoolBg() {
       const anim_progress = (t % cycle) / cycle;
       const fade_factor = Math.min(1, Math.max(0, (t - 0.6) / 2));
 
-      // let card = pulse(t) + getCardOffset(anim_progress, fade_factor);;
       let throb_a = pulse(t) + calcOffset(anim_progress + 0.03, fade_factor);
       let throb_b = pulse(t - 0.08) + calcOffset(anim_progress - 0.05, fade_factor);
       let throb_c = pulse(t - 0.16) + calcOffset(anim_progress - 0.1, fade_factor);
 
-      root.forEach((element:any) => {
-        // element.style.setProperty("--throb-card", card);
+      root.forEach((element: any) => {
         element.style.setProperty("--throb-a", throb_a);
         element.style.setProperty("--throb-b", throb_b);
         element.style.setProperty("--throb-c", throb_c);
@@ -46,18 +39,17 @@ export default function CoolBg() {
   })
 
   return (
-    <div id="zenith_wrapper">
-
-    <div id="zenith_deck_block" data-zenithmenu-context="both">
-      <div id="zenith_card_shatter">
-        <img id="zenith_card_shatter_glass_a" src="/res/cool-bg/glass-a.png" />
-        <img id="zenith_card_shatter_glass_b" src="/res/cool-bg/glass-b.png" />
-        <img id="zenith_card_shatter_glass_c" src="/res/cool-bg/glass-c.png" />
-        <img id="zenith_card_shatter_throb_a" src="/res/cool-bg/throb-a.png" />
-        <img id="zenith_card_shatter_throb_b" src="/res/cool-bg/throb-b.png" />
-        <img id="zenith_card_shatter_throb_c" src="/res/cool-bg/throb-c.png" />
+    <div id="coolbg_wrapper">
+      <div id="coolbg_deck_block">
+        <div id="coolbg_card_shatter">
+          <img id="coolbg_card_shatter_glass_a" src="/res/cool-bg/glass-a.png" />
+          <img id="coolbg_card_shatter_glass_b" src="/res/cool-bg/glass-b.png" />
+          <img id="coolbg_card_shatter_glass_c" src="/res/cool-bg/glass-c.png" />
+          <img id="coolbg_card_shatter_throb_a" src="/res/cool-bg/throb-a.png" />
+          <img id="coolbg_card_shatter_throb_b" src="/res/cool-bg/throb-b.png" />
+          <img id="coolbg_card_shatter_throb_c" src="/res/cool-bg/throb-c.png" />
+        </div>
       </div>
-    </div>
     </div>
   )
 

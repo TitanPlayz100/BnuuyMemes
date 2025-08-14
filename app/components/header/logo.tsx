@@ -18,8 +18,8 @@ export default function Logo() {
 
   return (
     <>
-      <div className="flex gap-2 items-center">
-        <div onAnimationEnd={() => setAnimating(false)} className={`${animating ? styles.animate : ""}`}>
+      <div className="flex gap-3 items-center">
+        <div onAnimationEnd={() => setAnimating(false)} className={`${animating ? styles.animate : ""} w-15`}>
           <Image onClick={click} src={url ? '/res/goodlogo.png' : '/res/badlogo.png'} alt="logo" width={240} height={240} className="w-15 h-15 ml-2 cursor-pointer" />
         </div>
         <Link className="text-2xl md:text-4xl text-text-highlight hover:text-white transition mt-2" href="/">BNUUYMEMES</Link>

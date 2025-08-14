@@ -1,4 +1,4 @@
-#zenith_wrapper {
+#coolbg_wrapper {
   position: absolute;
   z-index: -1;
   margin: 0;
@@ -6,27 +6,29 @@
   overflow: hidden;
   margin: calc(var(--spacing) * -2);
   pointer-events:none;
+  width: 1920px;
+  height: 76px;
+
 }
 
-#zenith_deck_block {
+#coolbg_deck_block {
   position: relative;
-  width: 100vw;
-  aspect-ratio: 6/1;
   box-sizing: border-box;
   transition: .3s background-color;
-  clip-path: rect(7vh 100vw 15vh 0vw);
-  translate: 0vw -7vh;
+  height: 180px;
+  width: 100%;
+  translate: 0px -50px;
   background-color: #2a070e;
   animation: .2s .5s ZenithDeckBlockImpact ease-out, .2s .5s ZenithDeckBlockGlow forwards;
 }
 
-#zenith_card_shatter {
+#coolbg_card_shatter {
   transition: .3s opacity;
 }
 
-#zenith_card_shatter_glass_a,
-#zenith_card_shatter_glass_b,
-#zenith_card_shatter_glass_c {
+#coolbg_card_shatter_glass_a,
+#coolbg_card_shatter_glass_b,
+#coolbg_card_shatter_glass_c {
   position: absolute;
   top: 0;
   left: 0;
@@ -35,9 +37,9 @@
   animation: 1s .5s ZenithCardShatterGlass ease-out backwards;
 }
 
-#zenith_card_shatter_throb_a,
-#zenith_card_shatter_throb_b,
-#zenith_card_shatter_throb_c {
+#coolbg_card_shatter_throb_a,
+#coolbg_card_shatter_throb_b,
+#coolbg_card_shatter_throb_c {
   position: absolute;
   top: 0;
   left: 0;
@@ -45,15 +47,15 @@
   height: 100%;
 }
 
-#zenith_card_shatter_throb_a {
+#coolbg_card_shatter_throb_a {
   opacity: var(--throb-a)
 }
 
-#zenith_card_shatter_throb_b {
+#coolbg_card_shatter_throb_b {
   opacity: var(--throb-b)
 }
 
-#zenith_card_shatter_throb_c {
+#coolbg_card_shatter_throb_c {
   opacity: var(--throb-c)
 }
 

@@ -3,14 +3,12 @@ import Logo from "./logo";
 import Image from "next/image";
 import { createClient } from '@/db/dbServer'
 import Logout from './logout'
-import CoolBg from "./cool-bg";
 
 export default async function Header() {
   const supabase = await createClient()
   const { data } = await supabase.auth.getUser();
   return (
     <header className="bg-foreground text-text font-hun flex p-2 pr-4 justify-between bg-[url(/res/header.png)] z-[0]">
-
       <Logo />
 
       <div className="hidden md:flex items-center gap-5">

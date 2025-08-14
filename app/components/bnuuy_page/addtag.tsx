@@ -5,7 +5,7 @@ import { removeTagFromMedia } from "@/db/tags/delete_tag";
 import { useState } from "react"
 import { profanity } from '@2toad/profanity';
 
-export function AddTag({ mediaId, signed_in }: { mediaId: number, signed_in: boolean }) {
+export default function AddTag({ mediaId, signed_in }: { mediaId: number, signed_in: boolean }) {
   const [adding, setAdding] = useState(false);
   const [value, setValue] = useState('');
   const [undoValue, setUndoValue] = useState('');
