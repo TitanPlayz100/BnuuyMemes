@@ -8,7 +8,7 @@
   pointer-events:none;
   width: 100%;
   height: 76px;
-
+  background: var(--background-secondary);
 }
 
 #coolbg_deck_block {
