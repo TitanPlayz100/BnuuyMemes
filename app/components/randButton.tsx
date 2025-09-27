@@ -1,11 +1,14 @@
 "use client"
 
 import { useRouter } from "next/navigation"
+import { resetVisited, visited } from "./visited";
 
 export default function Random({ className, mediaCount }: { className: string, mediaCount: number }) {
   const router = useRouter();
+
   const random = async () => {
-    const random = Math.floor(Math.random() * mediaCount);
+    if (visited.length === 0) resetVisited(mediaCount);
+    const random = visited.pop();
     router.push(`/bnuuys/${random}`);
   }
 
