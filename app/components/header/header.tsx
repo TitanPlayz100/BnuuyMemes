@@ -4,6 +4,8 @@ import Image from "next/image";
 import { createClient } from '@/db/dbServer'
 import Logout from './logout'
 
+const ADMIN_ID = process.env.ADMIN_ID;
+
 export default async function Header() {
   const supabase = await createClient()
   const { data } = await supabase.auth.getUser();
@@ -23,6 +25,7 @@ export default async function Header() {
         </Link>
 
         {data.user ? <Logout /> : <Link href="/auth/login" className="hover:brightness-200">LOGIN</Link>}
+        {(data.user && data.user.id === ADMIN_ID) ? <Link href="/auth/admin-upload" className="hover:brightness-200">ADMIN</Link> : <></>}
       </div>
 
       <div className="md:hidden flex items-center gap-5">

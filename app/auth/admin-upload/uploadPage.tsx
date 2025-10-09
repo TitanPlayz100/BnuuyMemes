@@ -1,26 +1,34 @@
 "use client";
 
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { getUploadURL, getVideos, insertData, Message } from "./actions";
 
 const AMOUNT = 10;
 
 export default function AdminUpload() {
   const [pins, setPins] = useState<Message[]>([]);
+  const [failedPins, setFailedPins] = useState<Message[]>([]);
   const [uploadProgress, setUploadProgress] = useState<Record<string, number>>({});
 
   const getPins = async () => {
     const list = await getVideos();
     if ('error' in list) return;
-    setPins(list.filter(m => m.name != null && m.url.startsWith("https://cdn.discordapp.com")).toReversed());
+    const pinlist = list.filter(m => m.name != null && m.url.startsWith("https://cdn.discordapp.com")).toReversed()
+    setPins(pinlist);
+    const pinlistFailed = list.filter(m => m.name == null || !m.url.startsWith("https://cdn.discordapp.com")).toReversed()
+    setFailedPins(pinlistFailed);
   };
 
   const handleUpload = async () => {
     pins.filter(m => uploadProgress[m.name] == undefined).slice(0, AMOUNT).forEach(async msg => {
       try {
-        uploadVideo(msg)
+        const proxiedUrl = `/auth/media-proxy?url=${encodeURIComponent(msg.url)}`;
+        const buffer = await (await fetch(proxiedUrl)).arrayBuffer();
+        uploadVideo(msg, buffer)
       } catch (error) {
         console.log(error);
+        setFailedPins([...failedPins, msg]);
+        setPins(pins.filter(m => m.name != msg.name));
       }
     })
   };
@@ -52,13 +60,11 @@ export default function AdminUpload() {
     });
   }
 
-  async function uploadVideo(msg: Message) {
-    const proxiedUrl = `/auth/media-proxy?url=${encodeURIComponent(msg.url)}`;
-    const buffer = await (await fetch(proxiedUrl)).arrayBuffer();
-    const thumbnailDataUrl = await generateTN(buffer);
+  async function uploadVideo(msg: Message, video: ArrayBuffer) {
+    const thumbnailDataUrl = await generateTN(video);
 
     const thumbnailBlob = await fetch(thumbnailDataUrl).then(r => r.blob());
-    const videoBlob = new Blob([buffer], { type: 'video/mp4' });
+    const videoBlob = new Blob([video], { type: 'video/mp4' });
 
     const WORKER_URL = await getUploadURL()
 
@@ -87,13 +93,20 @@ export default function AdminUpload() {
     insertData(msg);
   }
 
+  async function handleVideoUpload(event: ChangeEvent<HTMLInputElement>, msg: Message) {
+    const file = event.target.files;
+    if (!file) return;
+    const buffer = await file[0].arrayBuffer();
+    uploadVideo(msg, buffer)
+  }
+
   return (
     <div className="p-4 mx-30 my-5">
-      <button onClick={getPins} className="px-4 py-2 bg-blue-500 text-white rounded">
+      <button onClick={getPins} className="px-2 py-1 text-lg text-background-dark bg-text rounded hover:bg-white transition">
         Fetch Videos
       </button>
 
-      <button onClick={handleUpload} className=" px-4 py-2 bg-green-500 text-white rounded absolute right-40">
+      <button onClick={handleUpload} className=" px-2 py-1 text-lg text-background-dark bg-text rounded hover:bg-white transition absolute right-40">
         Upload First {AMOUNT}
       </button>
 
@@ -102,6 +115,40 @@ export default function AdminUpload() {
           <div key={i} className={"border-2 p-2 rounded-md w-60 flex flex-col " + ((i < AMOUNT) ? "border-green-500 " : "") + (((uploadProgress[msg.name] || 0) == 100) ? "bg-[#00ff0020]" : "")}>
             <p className="truncate">{msg.name}</p>
             <p className="italic text-text-second truncate">{msg.author}</p>
+            <progress
+              value={uploadProgress[msg.name] || 0}
+              max={100}
+              className="w-full h-1 bg-transparent hue-rotate-250"
+            />
+          </div>
+        ))}
+      </div>
+
+      {/* Can't Automatially Upload */}
+      {failedPins.length > 0 && <h1 className="text-text text-2xl">Inaccessible</h1>}
+
+      <div className="text-text flex flex-wrap gap-2 my-5">
+        {failedPins.map((msg, i) => (
+          <div key={i} className={"border-2 p-2 rounded-md w-60 flex flex-col " + (((uploadProgress[msg.name] || 0) == 100) ? "bg-[#00ff0020]" : "")}>
+            <p className="truncate">{msg.name}</p>
+            <p className="italic text-text-second truncate">{msg.author}</p>
+            <div className="flex flex-row justify-center">
+              <a target='_blank' href={msg.original} className='m-1 px-2 py-1 text-lg text-background-dark bg-text rounded hover:bg-white w-fit '>Original</a>
+              <label
+                htmlFor="videoUpload"
+                className="m-1 px-2 py-1 text-lg text-background-dark bg-text rounded hover:bg-white w-fit cursor-pointer"
+              >
+                Upload
+                <input
+                  id="videoUpload"
+                  type="file"
+                  accept="video/*"
+                  className="hidden"
+                  onChange={(e) => handleVideoUpload(e, msg)}
+                />
+              </label>
+            </div>
+
             <progress
               value={uploadProgress[msg.name] || 0}
               max={100}
