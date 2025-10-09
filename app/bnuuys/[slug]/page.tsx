@@ -14,7 +14,7 @@ import Likes from '@/app/components/bnuuy_page/like';
 import { createClient } from '@/db/dbServer';
 import TagList from '@/app/components/bnuuy_page/tags';
 
-const EXPIRY_SECONDS = 60;
+const EXPIRY_SECONDS = 180;
 
 function fetchURL(name: string) {
   const { SECRET_KEY, BASE_VIDEO_URL }: any = process.env;
