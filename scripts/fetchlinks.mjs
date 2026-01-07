@@ -3,7 +3,7 @@ import { config } from "dotenv";
 config({ path: "../.env" });
 
 const baseURL = "https://discord.com/api/v10" // Discord API url
-const guildID = process.env.GUILD_ID
+const guildID = '673303546107658242'
 const content = encodeURI("author original message") // search keywords
 const LIMIT = 99; // number of messages recieved from search (ceil to nearest 25)
 

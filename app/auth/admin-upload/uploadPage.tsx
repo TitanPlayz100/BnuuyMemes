@@ -1,7 +1,7 @@
 "use client";
 
 import { ChangeEvent, useState } from "react";
-import { getUploadURL, getVideos, insertData, Message } from "./actions";
+import { getMessage, getUploadURL, getVideos, insertData, Message } from "./actions";
 
 const AMOUNT = 10;
 
@@ -9,6 +9,7 @@ export default function AdminUpload() {
   const [pins, setPins] = useState<Message[]>([]);
   const [failedPins, setFailedPins] = useState<Message[]>([]);
   const [uploadProgress, setUploadProgress] = useState<Record<string, number>>({});
+  const [messageId, setMessageId] = useState("");
 
   const getPins = async () => {
     const list = await getVideos();
@@ -100,15 +101,25 @@ export default function AdminUpload() {
     uploadVideo(msg, buffer)
   }
 
+  const changeMID = (word: string) => setMessageId(word);
+
+  const fetchMessageInfo = async (MID: string) => {
+    const info = await getMessage(MID);
+    setFailedPins([...failedPins, info]);
+  }
+
   return (
     <div className="p-4 mx-30 my-5">
-      <button onClick={getPins} className="px-2 py-1 text-lg text-background-dark bg-text rounded hover:bg-white transition">
-        Fetch Videos
-      </button>
+      <div className="flex md:flex-row flex-col gap-5 justify-between w-full">
+        <button onClick={getPins} className="px-2 py-1 text-lg text-background-dark bg-text rounded hover:bg-white transition">
+          Fetch Videos
+        </button>
 
-      <button onClick={handleUpload} className=" px-2 py-1 text-lg text-background-dark bg-text rounded hover:bg-white transition absolute right-40">
-        Upload First {AMOUNT}
-      </button>
+        <button onClick={handleUpload} className=" px-2 py-1 text-lg text-background-dark bg-text rounded hover:bg-white transition">
+          Upload First {AMOUNT}
+        </button>
+      </div>
+
 
       <div className="text-text flex flex-wrap gap-2 my-5">
         {pins.map((msg, i) => (
@@ -156,6 +167,20 @@ export default function AdminUpload() {
             />
           </div>
         ))}
+      </div>
+
+      <div className="text-text flex flex-wrap gap-2 my-5">
+        <div className={"border-2 p-2 rounded-md w-60 flex flex-col gap-1"}>
+          <p className="truncate">Add Bnuuy</p>
+          <input
+            type='text'
+            value={messageId}
+            placeholder='Message Id'
+            onInput={(e: any) => changeMID(e.target.value)}
+            onKeyDown={e => { if (e.key == 'Enter') { fetchMessageInfo(messageId) } }}
+            className='border border-foreground p-1 outline-none m-2'
+          />
+        </div>
       </div>
     </div>
   );

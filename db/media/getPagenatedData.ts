@@ -11,11 +11,12 @@ export interface Data {
   name: string,
   like_count: number,
   meta?: string[],
+  date_created: string
 }
 
 const ITEMS_PER_PAGE = 25;
 
-const sortList = ['id', 'like_count', 'name', 'author'];
+const sortList = ['date_created', 'like_count', 'name', 'author'];
 const sortAsc = ['name', 'author'];
 const typeList = ['all', 'video', 'audio', 'image', 'text', 'other'];
 
@@ -30,8 +31,8 @@ export const getPaginatedData = unstable_cache(
     const page = Number(params.page ?? 1) || 1;
     const searchString = params.search ?? '';
     const tags = params.tags?.split(',') ?? [];
-    let sort = params.sort ?? 'id';
-    if (!sortList.includes(sort)) sort = 'id';
+    let sort = params.sort ?? 'date_created';
+    if (!sortList.includes(sort)) sort = 'date_created';
     let type = params.type ?? 'all';
     if (!typeList.includes(type)) type = 'all';
 

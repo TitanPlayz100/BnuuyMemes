@@ -9,7 +9,8 @@ export interface Message {
   type: string
   name: string,
   url: string,
-  thumbnail?: string
+  thumbnail?: string,
+  date_created: string
 }
 
 const baseURL = "https://discord.com/api/v10"
@@ -34,7 +35,8 @@ export async function getVideos(): Promise<Message[] | { error: PostgrestError }
       original: `https://discord.com/channels/673303546107658242/917245246449016853/${msg.message.id}`,
       type: media?.content_type.split('/')[0] ?? null,
       name: media?.filename ?? null,
-      url: media?.url ?? null
+      url: media?.url ?? null,
+      date_created: msg.message.timestamp
     }
   })
 
@@ -45,10 +47,23 @@ export async function getVideos(): Promise<Message[] | { error: PostgrestError }
   return newParsed;
 }
 
+export async function getMessage(messageId: string): Promise<any> {
+  const res = await fetch(`${baseURL}/channels/917245246449016853/messages?around=${messageId}&limit=1`, { headers: { Authorization: token } });
+  const data = await res.json();
+  return {
+    author: data[0].author.username,
+    original: `https://discord.com/channels/673303546107658242/917245246449016853/${messageId}`,
+    date_created: data[0].timestamp,
+    type: null,
+    name: null,
+    url: null
+  }
+}
+
 export async function insertData(msg: Message) {
   const supabase = await createClient();
 
-  const newmsg = { name: msg.name, author: msg.author, original: msg.original, type: msg.type }
+  const newmsg = { name: msg.name, author: msg.author, original: msg.original, type: msg.type, date_created: msg.date_created }
   const { error } = await supabase.from("media").insert(newmsg);
 
   if (error) {

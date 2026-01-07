@@ -5,6 +5,16 @@ import AddTag from "./addtag"
 
 type tagsType = { tag: string, id: string }
 
+const tagColours: Record<string, string> = {
+  other_thread: "#41473d",
+  unpinned: "#41473d",
+  image: "#41473d",
+  catbox: "#41473d",
+  twitter: "#182578",
+  bsky: "#182578",
+  youtube: "#631313",
+}
+
 export default function TagList({ tags, id, userid }: { tags: tagsType[], id: number, userid: string | undefined }) {
 
   async function deleteTag(tag: string) {
@@ -13,8 +23,9 @@ export default function TagList({ tags, id, userid }: { tags: tagsType[], id: nu
   }
 
   function Tag({ tag }: { tag: tagsType }) {
+    const tagColour = tagColours[tag.tag] ?? "none"
     return (
-      <div className='bg-foreground-second text-text p-1 px-3 rounded-4xl'>
+      <div style={{backgroundColor: tagColour}} className='text-text p-1 px-3 rounded-4xl bg-foreground-second' >
         {tag.tag}
         {tag.id && userid == tag.id && (
           <button className="px-1 rounded-4xl cursor-pointer" onClick={() => deleteTag(tag.tag)}>-</button>

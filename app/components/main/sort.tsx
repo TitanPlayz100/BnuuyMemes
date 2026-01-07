@@ -6,10 +6,10 @@ import { ChangeEvent, useState } from "react";
 import { populateParams } from "./search";
 import { revalidateEverything } from "@/db/warmCache";
 
-const sortList = ['id', 'like_count', 'name', 'author'];
+const sortList = ['date_created', 'like_count', 'name', 'author'];
 
 export default function Sort({ params }: { params: RootParams }) {
-  const [value, setValue] = useState(params.sort ?? 'id');
+  const [value, setValue] = useState(params.sort ?? 'date_created');
   const router = useRouter();
 
   const setSort = async (e: ChangeEvent<HTMLSelectElement>) => {

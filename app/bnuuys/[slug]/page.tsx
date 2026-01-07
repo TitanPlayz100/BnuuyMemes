@@ -87,6 +87,9 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
       <div className='w-full flex justify-center items-center gap-2 md:gap-10'>
         <Likes likes={likes} hasLiked={liked} id={id} signed_in={!userData.error} />
       </div>
+      <div className='flex gap-2 md:gap-10 justify-center flex-col md:flex-row items-center text-center opacity-70 italic'>
+        <p>Uploaded {(new Date(data.date_created)).toLocaleDateString()}</p>
+      </div>
       {tags && <TagList tags={tags} id={id} userid={userData.data?.user?.id} />}
     </div>
   )
