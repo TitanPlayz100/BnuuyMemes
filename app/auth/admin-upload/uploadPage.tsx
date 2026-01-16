@@ -97,6 +97,9 @@ export default function AdminUpload() {
   async function handleVideoUpload(event: ChangeEvent<HTMLInputElement>, msg: Message) {
     const file = event.target.files;
     if (!file) return;
+
+    const name = file[0].name;
+    if (msg.name == undefined) msg.name = name;
     const buffer = await file[0].arrayBuffer();
     uploadVideo(msg, buffer)
   }
