@@ -6,8 +6,9 @@ export async function GET(request: Request) {
   const res = await fetch(url??"");
   return new NextResponse(res.body, {
     headers: {
-      "Content-Type": res.headers.get("Content-Type") || "video/mp4",
+      "Content-Type": res.headers.get("Content-Type") || "application/octet-stream",
       "Cache-Control": "public, max-age=86400", // optional caching
+      "Access-Control-Allow-Origin": "*",
     },
   });
 }

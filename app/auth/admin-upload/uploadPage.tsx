@@ -16,6 +16,7 @@ export default function AdminUpload() {
     if ('error' in list) return;
     const pinlist = list.filter(m => m.name != null && m.url.startsWith("https://cdn.discordapp.com")).toReversed()
     setPins(pinlist);
+    console.log(pinlist);
     const pinlistFailed = list.filter(m => m.name == null || !m.url.startsWith("https://cdn.discordapp.com")).toReversed()
     setFailedPins(pinlistFailed);
   };
@@ -24,8 +25,12 @@ export default function AdminUpload() {
     pins.filter(m => uploadProgress[m.name] == undefined).slice(0, AMOUNT).forEach(async msg => {
       try {
         const proxiedUrl = `/auth/media-proxy?url=${encodeURIComponent(msg.url)}`;
-        const buffer = await (await fetch(proxiedUrl)).arrayBuffer();
-        uploadVideo(msg, buffer)
+        const res = await fetch(proxiedUrl);
+
+        const contentType = res.headers.get("Content-Type") || "";
+        const buffer = await res.arrayBuffer();
+
+        uploadMedia(msg, buffer, contentType);
       } catch (error) {
         console.log(error);
         setFailedPins([...failedPins, msg]);
@@ -34,45 +39,62 @@ export default function AdminUpload() {
     })
   };
 
-  async function generateTN(buffer: ArrayBuffer): Promise<string> {
-    return new Promise((resolve, reject) => {
-      const blob = new Blob([buffer], { type: 'video/mp4' });
-      const url = URL.createObjectURL(blob);
-      const video = document.createElement('video');
-      video.crossOrigin = "anonymous";
-      video.src = url;
+  async function generateTN(buffer: ArrayBuffer, type: string): Promise<Blob | null> {
+    if (type.startsWith('audio/')) return null;
 
-      video.addEventListener('loadeddata', () => {
+    return new Promise((resolve, reject) => {
+      const isVideo = type.startsWith('video/');
+      const blob = new Blob([buffer], { type });
+      const url = URL.createObjectURL(blob);
+
+      const el = document.createElement(isVideo ? 'video' : 'img');
+      const process = () => {
         const canvas = document.createElement('canvas');
         canvas.width = 200;
         canvas.height = 200;
         const ctx = canvas.getContext('2d');
         if (!ctx) return reject("No canvas context");
+        const sourceWidth = isVideo ? (el as HTMLVideoElement).videoWidth : (el as HTMLImageElement).width;
+        const sourceHeight = isVideo ? (el as HTMLVideoElement).videoHeight : (el as HTMLImageElement).height;
 
-        ctx.drawImage(video, 0, 0, video.videoWidth, video.videoHeight, 0, 0, 200, 200);
+        ctx.drawImage(el, 0, 0, sourceWidth, sourceHeight, 0, 0, 200, 200);
+
         URL.revokeObjectURL(url);
-        resolve(canvas.toDataURL('image/png'));
-      });
+        canvas.toBlob((blob) => resolve(blob), 'image/png');
+      };
 
-      video.addEventListener('error', e => {
+      if (isVideo) {
+        const video = el as HTMLVideoElement;
+        video.preload = "metadata";
+        video.muted = true;
+        video.playsInline = true;
+        video.src = url;
+        video.addEventListener('loadeddata', process);
+      } else {
+        const img = el as HTMLImageElement;
+        img.src = url;
+        img.onload = process;
+      }
+
+      el.onerror = (e) => {
         URL.revokeObjectURL(url);
         reject(e);
-      });
+      };
     });
   }
 
-  async function uploadVideo(msg: Message, video: ArrayBuffer) {
-    const thumbnailDataUrl = await generateTN(video);
-
-    const thumbnailBlob = await fetch(thumbnailDataUrl).then(r => r.blob());
-    const videoBlob = new Blob([video], { type: 'video/mp4' });
-
-    const WORKER_URL = await getUploadURL()
+  async function uploadMedia(msg: Message, buffer: ArrayBuffer, type: string) {
+    const thumbnailBlob = await generateTN(buffer, type);
+    const mediaBlob = new Blob([buffer], { type });
+    const WORKER_URL = await getUploadURL();
 
     const formData = new FormData();
     formData.append('name', msg.name);
-    formData.append('video', videoBlob, msg.name);
-    formData.append('thumbnail', thumbnailBlob, `${msg.name.split('.')[0]}.png`);
+    formData.append('file', mediaBlob, msg.name); // Using generic 'file' key
+
+    if (thumbnailBlob) {
+      formData.append('thumbnail', thumbnailBlob, `${msg.name.split('.')[0]}_thumb.png`);
+    }
 
     await new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
@@ -83,25 +105,21 @@ export default function AdminUpload() {
           setUploadProgress((prev) => ({ ...prev, [msg.name]: percent }));
         }
       };
-      xhr.onload = () => {
-        if (xhr.status >= 200 && xhr.status < 300) resolve(null);
-        else reject(new Error(xhr.statusText));
-      };
-      xhr.onerror = () => reject(new Error('Upload failed'));
+      xhr.onload = () => (xhr.status >= 200 && xhr.status < 300) ? resolve(null) : reject();
+      xhr.onerror = () => reject();
       xhr.send(formData);
-    })
+    });
 
     insertData(msg);
   }
 
-  async function handleVideoUpload(event: ChangeEvent<HTMLInputElement>, msg: Message) {
-    const file = event.target.files;
-    if (!file) return;
+  async function handleManualUpload(event: ChangeEvent<HTMLInputElement>, msg: Message) {
+    const file = event.target.files?.[0];
 
-    const name = file[0].name;
-    if (msg.name == undefined) msg.name = name;
-    const buffer = await file[0].arrayBuffer();
-    uploadVideo(msg, buffer)
+    if (file) {
+      const buffer = await file.arrayBuffer();
+      uploadMedia(msg, buffer, file.type);
+    }
   }
 
   const changeMID = (word: string) => setMessageId(word);
@@ -156,9 +174,9 @@ export default function AdminUpload() {
                 <input
                   id="videoUpload"
                   type="file"
-                  accept="video/*"
+                  accept="video/*,image/*,audio/*"
                   className="hidden"
-                  onChange={(e) => handleVideoUpload(e, msg)}
+                  onChange={(e) => handleManualUpload(e, msg)}
                 />
               </label>
             </div>
