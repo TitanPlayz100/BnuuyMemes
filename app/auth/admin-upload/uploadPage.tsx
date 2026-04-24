@@ -117,6 +117,7 @@ export default function AdminUpload() {
     const file = event.target.files?.[0];
 
     if (file) {
+      msg.name = file.name;
       const buffer = await file.arrayBuffer();
       uploadMedia(msg, buffer, file.type);
     }
