@@ -1,6 +1,38 @@
 import { readFileSync, readdirSync, writeFileSync } from 'fs';
+import { ListObjectsV2Command, S3Client } from "@aws-sdk/client-s3";
+import dotenv from "dotenv"
+dotenv.config({ path: "../.env" });
 
-// ### Random scripts to finetune parsed data and maxisime valid bnuuys retrieved
+// ### Random scripts to finetune parsed data and maximise valid bnuuys retrieved
+
+const { UPLOAD_URL, ACCESS_KEY, SECRET_ACCESS_KEY } = process.env
+const BUCKET_NAME = 'bnuuys'
+const S3 = new S3Client({
+  region: "auto",
+  endpoint: UPLOAD_URL,
+  credentials: {
+    accessKeyId: ACCESS_KEY,
+    secretAccessKey: SECRET_ACCESS_KEY,
+  },
+});
+
+async function getAllSorted() {
+    const res = await S3.send(new ListObjectsV2Command({ Bucket: BUCKET_NAME }));
+    let output = res.Contents
+        .toSorted((a, b) => b.Size - a.Size)
+        .map(file => {
+            return { name: file.Key, size: formatSize(file.Size) }
+        })
+    writeFileSync("./sortedSize.json", JSON.stringify(output, null, 2), "utf-8")
+}
+
+function formatSize(size) {
+  const sizes = ['B', 'KB', 'MB', 'GB'];
+  const unit = Math.floor(Math.log(size) / Math.log(2**10));
+  return parseFloat((size / Math.pow(2**10, unit)).toFixed(2)) + ' ' + sizes[unit];
+}
+
+getAllSorted()
 
 // Compares file names from messages to already downloaded files and outputs which are missing
 function getFailed() {
